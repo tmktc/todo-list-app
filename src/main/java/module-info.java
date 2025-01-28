@@ -5,4 +5,6 @@ module cz.tmktc.todolistapp {
 
     opens cz.tmktc.todolistapp to javafx.fxml;
     exports cz.tmktc.todolistapp;
+    exports cz.tmktc.todolistapp.controller;
+    opens cz.tmktc.todolistapp.controller to javafx.fxml;
 }
