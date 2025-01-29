@@ -13,9 +13,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -24,19 +22,10 @@ import java.io.IOException;
 public class HomeController {
 
     @FXML
-    private Button buttonShowAllTasks;
-
-    @FXML
     private ListView<Task> panelTasks;
 
     @FXML
     private ListView<Category> panelCategories;
-
-    @FXML
-    private Button buttonNewCategory;
-
-    @FXML
-    private Button buttonNewTask;
 
     private final ObservableList<Category> categoryList = FXCollections.observableArrayList();
     private final ObservableList<Task> taskList = FXCollections.observableArrayList();
@@ -55,7 +44,7 @@ public class HomeController {
 
 
     @FXML
-    public void clickNewTaskButton(MouseEvent mouseEvent) throws IOException {
+    public void clickNewTaskButton() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(ToDoApp.class.getResource("newTaskForm.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = new Stage();
@@ -65,7 +54,7 @@ public class HomeController {
         stage.show();
     }
 
-    public void clickNewCategoryButton(MouseEvent mouseEvent) throws IOException {
+    public void clickNewCategoryButton() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(ToDoApp.class.getResource("newCategoryForm.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = new Stage();
@@ -90,9 +79,9 @@ public class HomeController {
     }
 
     @FXML
-    public void clickCategoryPanel(MouseEvent mouseEvent) {
+    public void clickCategoryPanel() {
         Category target = panelCategories.getSelectionModel().getSelectedItem();
-
+        if (target == null) return;
         taskList.clear();
         taskList.addAll(TaskManager.getInstance().taskList.stream()
                 .filter(task -> task.getCategory().getId() == target.getId()).toList());
@@ -100,7 +89,7 @@ public class HomeController {
         panelTasks.setItems(taskList);
     }
 
-    public void clickShowAllTasksButton(MouseEvent mouseEvent) {
+    public void clickShowAllTasksButton() {
         updateTaskList();
     }
 }

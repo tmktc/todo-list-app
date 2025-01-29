@@ -30,13 +30,6 @@ public class TaskManager implements Observable {
         notifyObserver();
     }
 
-    public Task readTask(int id) {
-        for (Task task: taskList) {
-            if (task.getId() == id) return task;
-        }
-        return null;
-    }
-
     public void updateTask(int id, String name, LocalDate dueDate, boolean completed) {
         for (Task task: taskList) {
             if (task.getId() == id) {

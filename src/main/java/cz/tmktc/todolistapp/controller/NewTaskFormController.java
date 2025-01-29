@@ -7,7 +7,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 public class NewTaskFormController {
@@ -37,7 +36,7 @@ public class NewTaskFormController {
         boxCategory.setItems(categories);
     }
 
-    public void clickCreateButton(MouseEvent mouseEvent) {
+    public void clickCreateButton() {
 
         if (fieldName.getText().isEmpty() || boxCategory.getValue() == null || datePickerDueDate.getValue() == null) {
             labelWarning.setText("All fields have to be filled");

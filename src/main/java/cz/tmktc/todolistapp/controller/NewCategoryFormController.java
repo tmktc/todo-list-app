@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 public class NewCategoryFormController {
@@ -20,7 +19,7 @@ public class NewCategoryFormController {
     private TextField fieldName;
 
     @FXML
-    public void clickCreateButton(MouseEvent mouseEvent) {
+    public void clickCreateButton() {
 
         if (fieldName.getText().isEmpty()) {
             labelWarning.setText("Category name can not be empty");

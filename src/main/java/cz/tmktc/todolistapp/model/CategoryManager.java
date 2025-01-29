@@ -28,13 +28,6 @@ public class CategoryManager implements Observable {
         notifyObserver();
     }
 
-    public Category readCategory(int id) {
-        for (Category category: categoryList) {
-            if (category.getId() == id) return category;
-        }
-        return null;
-    }
-
     public void updateCategory(int id, String name) {
         for (Category category: categoryList) {
             if (category.getId() == id) {

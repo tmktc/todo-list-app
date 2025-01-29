@@ -1,6 +1,5 @@
 package cz.tmktc.todolistapp;
 
-import cz.tmktc.todolistapp.model.TaskManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

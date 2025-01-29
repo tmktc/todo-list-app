@@ -4,30 +4,38 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cz.tmktc.todolistapp.controller.NewTaskFormController">
-  <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" />
-    <ColumnConstraints hgrow="SOMETIMES" />
-  </columnConstraints>
-  <rowConstraints>
-    <RowConstraints vgrow="SOMETIMES" />
-    <RowConstraints vgrow="SOMETIMES" />
-    <RowConstraints vgrow="SOMETIMES" />
-      <RowConstraints vgrow="SOMETIMES" />
-      <RowConstraints vgrow="SOMETIMES" />
-  </rowConstraints>
-   <children>
-      <Label text="Name" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-      <Label text="Category" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-      <Label text="Due Date" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-      <TextField fx:id="fieldName" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-      <DatePicker fx:id="datePickerDueDate" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-      <ChoiceBox fx:id="boxCategory" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-      <Button fx:id="buttonCreate" mnemonicParsing="false" onMouseClicked="#clickCreateButton" text="Create" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-      <Label fx:id="labelWarning" textFill="RED" GridPane.columnIndex="1" GridPane.rowIndex="3">
-         <font>
-            <Font name="Source Code Pro" size="14.0" />
-         </font>
-      </Label>
-   </children>
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0"
+          prefWidth="400.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="cz.tmktc.todolistapp.controller.NewTaskFormController">
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES"/>
+        <ColumnConstraints hgrow="SOMETIMES"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+    </rowConstraints>
+    <Label text="Name" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.valignment="CENTER"
+           GridPane.vgrow="NEVER"/>
+    <Label text="Category" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="1"
+           GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+    <Label text="Due Date" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="2"
+           GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+    <TextField fx:id="fieldName" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+               GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+    <DatePicker fx:id="datePickerDueDate" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+                GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+    <ChoiceBox fx:id="boxCategory" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
+               GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+    <Button fx:id="buttonCreate" mnemonicParsing="false" onMouseClicked="#clickCreateButton" text="Create"
+            GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="4"
+            GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
+    <Label fx:id="labelWarning" textFill="RED" GridPane.columnIndex="1" GridPane.rowIndex="3">
+        <font>
+          <Font name="Source Code Pro" size="14.0"/>
+        </font>
+    </Label>
 </GridPane>

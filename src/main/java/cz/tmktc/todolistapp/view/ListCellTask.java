@@ -1,6 +1,5 @@
 package cz.tmktc.todolistapp.view;
 
-import cz.tmktc.todolistapp.model.Category;
 import cz.tmktc.todolistapp.model.Task;
 import javafx.scene.control.ListCell;
 
