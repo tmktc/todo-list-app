@@ -4,12 +4,13 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane prefHeight="500.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cz.tmktc.todolistapp.controller.HomeController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" />
     </columnConstraints>
     <rowConstraints>
         <RowConstraints vgrow="SOMETIMES" />
+      <RowConstraints minHeight="-Infinity" vgrow="NEVER" />
     </rowConstraints>
     <SplitPane dividerPositions="0.3">
         <VBox>
@@ -17,22 +18,24 @@
             <font>
                <Font name="Source Code Pro" size="18.0" />
             </font></Label>
-            <ListView VBox.vgrow="ALWAYS" />
-            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="New Category">
+         <Button fx:id="buttonNewCategory" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#clickNewCategoryButton" text="New Category">
             <font>
                <Font name="Source Code Pro" size="14.0" />
-            </font></Button>
+            </font>
+         </Button>
+            <ListView fx:id="panelCategories" VBox.vgrow="ALWAYS" />
         </VBox>
         <VBox>
             <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Tasks">
             <font>
                <Font name="Source Code Pro" size="18.0" />
             </font></Label>
-            <ListView VBox.vgrow="ALWAYS" />
-            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="New Task">
-            <font>
-               <Font name="Source Code Pro" size="14.0" />
-            </font></Button>
+            <ListView fx:id="panelTasks" VBox.vgrow="ALWAYS" />
         </VBox>
     </SplitPane>
+      <Button fx:id="buttonNewTask" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#clickNewTaskButton" text="New Task" GridPane.rowIndex="1">
+      <font>
+         <Font name="Source Code Pro" size="18.0" />
+      </font>
+   </Button>
 </GridPane>
