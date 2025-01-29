@@ -4,25 +4,31 @@ import java.util.Date;
 
 public class Task {
     private final int id;
+    private Category category;
     private String name;
-    private String description;
     private Date dueDate;
     private boolean completed;
     private static int idCounter;
 
-    public Task(String name, String description, Date dueDate) {
+    public Task(String name, Category category, Date dueDate) {
         this.id = (idCounter+1);
+        this.category = category;
         this.name = name;
-        this.description = description;
         this.dueDate = dueDate;
         this.completed = false;
         idCounter++;
     }
 
-
-
     public int getId() {
         return id;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public String getName() {
@@ -31,14 +37,6 @@ public class Task {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public Date getDueDate() {
