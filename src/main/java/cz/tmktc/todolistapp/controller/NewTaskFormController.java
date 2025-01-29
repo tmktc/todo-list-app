@@ -6,14 +6,14 @@ import cz.tmktc.todolistapp.model.TaskManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 public class NewTaskFormController {
+
+    @FXML
+    private Label labelWarning;
 
     @FXML
     private TextField fieldName;
@@ -39,10 +39,12 @@ public class NewTaskFormController {
 
     public void clickCreateButton(MouseEvent mouseEvent) {
 
-        //TODO check whether fields aren't empty
-
-        TaskManager.getInstance().createTask(fieldName.getText(), boxCategory.getValue(), datePickerDueDate.getValue());
-        Stage stage = (Stage) buttonCreate.getScene().getWindow();
-        stage.close();
+        if (fieldName.getText().isEmpty() || boxCategory.getValue() == null || datePickerDueDate.getValue() == null) {
+            labelWarning.setText("All fields have to be filled");
+        } else {
+            TaskManager.getInstance().createTask(fieldName.getText(), boxCategory.getValue(), datePickerDueDate.getValue());
+            Stage stage = (Stage) buttonCreate.getScene().getWindow();
+            stage.close();
+        }
     }
 }
