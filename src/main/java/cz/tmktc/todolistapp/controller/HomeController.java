@@ -24,6 +24,9 @@ import java.io.IOException;
 public class HomeController {
 
     @FXML
+    private Button buttonShowAllTasks;
+
+    @FXML
     private ListView<Task> panelTasks;
 
     @FXML
@@ -40,9 +43,6 @@ public class HomeController {
 
     @FXML
     public void initialize() {
-        panelCategories.setItems(categoryList);
-        panelTasks.setItems(taskList);
-
         TaskManager.getInstance().register(ChangeType.TASKS_CHANGE, this::updateTaskList);
         CategoryManager.getInstance().register(ChangeType.CATEGORIES_CHANGE, this::updateCategoryList);
 
@@ -79,12 +79,28 @@ public class HomeController {
     private void updateCategoryList() {
         categoryList.clear();
         categoryList.addAll(CategoryManager.getInstance().categoryList);
+        panelCategories.setItems(categoryList);
     }
 
     @FXML
     private void updateTaskList() {
         taskList.clear();
         taskList.addAll(TaskManager.getInstance().taskList);
+        panelTasks.setItems(taskList);
     }
 
+    @FXML
+    public void clickCategoryPanel(MouseEvent mouseEvent) {
+        Category target = panelCategories.getSelectionModel().getSelectedItem();
+
+        taskList.clear();
+        taskList.addAll(TaskManager.getInstance().taskList.stream()
+                .filter(task -> task.getCategory().getId() == target.getId()).toList());
+
+        panelTasks.setItems(taskList);
+    }
+
+    public void clickShowAllTasksButton(MouseEvent mouseEvent) {
+        updateTaskList();
+    }
 }
