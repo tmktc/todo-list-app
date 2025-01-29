@@ -17,6 +17,9 @@ public class NewCategoryFormController {
 
     @FXML
     public void clickCreateButton(MouseEvent mouseEvent) {
+
+        //TODO check whether field isn't empty
+
         CategoryManager.getInstance().createCategory(fieldName.getText());
         Stage stage = (Stage) buttonCreate.getScene().getWindow();
         stage.close();

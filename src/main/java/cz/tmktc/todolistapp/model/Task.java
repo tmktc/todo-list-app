@@ -1,16 +1,16 @@
 package cz.tmktc.todolistapp.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Task {
     private final int id;
     private Category category;
     private String name;
-    private Date dueDate;
+    private LocalDate dueDate;
     private boolean completed;
     private static int idCounter;
 
-    public Task(String name, Category category, Date dueDate) {
+    public Task(String name, Category category, LocalDate dueDate) {
         this.id = (idCounter+1);
         this.category = category;
         this.name = name;
@@ -39,11 +39,11 @@ public class Task {
         this.name = name;
     }
 
-    public Date getDueDate() {
+    public LocalDate getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(Date dueDate) {
+    public void setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;
     }
 

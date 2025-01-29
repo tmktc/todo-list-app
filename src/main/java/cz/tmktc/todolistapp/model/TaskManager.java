@@ -4,6 +4,7 @@ import cz.tmktc.todolistapp.model.observer.ChangeType;
 import cz.tmktc.todolistapp.model.observer.Observable;
 import cz.tmktc.todolistapp.model.observer.Observer;
 
+import java.time.LocalDate;
 import java.util.*;
 
 public class TaskManager implements Observable {
@@ -24,7 +25,7 @@ public class TaskManager implements Observable {
         return taskManager;
     }
 
-    public void createTask(String name, Category category, Date dueDate) {
+    public void createTask(String name, Category category, LocalDate dueDate) {
         taskList.add(new Task(name, category, dueDate));
         notifyObserver();
     }
@@ -36,7 +37,7 @@ public class TaskManager implements Observable {
         return null;
     }
 
-    public void updateTask(int id, String name, Date dueDate, boolean completed) {
+    public void updateTask(int id, String name, LocalDate dueDate, boolean completed) {
         for (Task task: taskList) {
             if (task.getId() == id) {
                 task.setName(name);
