@@ -1,10 +1,7 @@
 package cz.tmktc.todolistapp.controller;
 
 import cz.tmktc.todolistapp.ToDoApp;
-import cz.tmktc.todolistapp.model.Category;
-import cz.tmktc.todolistapp.model.CategoryManager;
-import cz.tmktc.todolistapp.model.Task;
-import cz.tmktc.todolistapp.model.TaskManager;
+import cz.tmktc.todolistapp.model.*;
 import cz.tmktc.todolistapp.model.observer.ChangeType;
 import cz.tmktc.todolistapp.view.ListCellCategory;
 import cz.tmktc.todolistapp.view.ListCellTask;
@@ -33,7 +30,10 @@ public class HomeController {
     @FXML
     public void initialize() {
         TaskManager.getInstance().register(ChangeType.TASKS_CHANGE, this::updateTaskList);
-        CategoryManager.getInstance().register(ChangeType.CATEGORIES_CHANGE, this::updateCategoryList);
+        CategoryManager.getInstance().register(ChangeType.CATEGORIES_CHANGE, () -> {
+            updateCategoryList();
+            updateTaskList();
+        });
 
         updateCategoryList();
         updateTaskList();
@@ -44,7 +44,7 @@ public class HomeController {
 
 
     @FXML
-    public void clickNewTaskButton() throws IOException {
+    private void clickNewTaskButton() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(ToDoApp.class.getResource("newTaskForm.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = new Stage();
@@ -54,7 +54,8 @@ public class HomeController {
         stage.show();
     }
 
-    public void clickNewCategoryButton() throws IOException {
+    @FXML
+    private void clickNewCategoryButton() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(ToDoApp.class.getResource("newCategoryForm.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = new Stage();
@@ -79,7 +80,7 @@ public class HomeController {
     }
 
     @FXML
-    public void clickCategoryPanel() {
+    private void clickCategoryPanel() {
         Category target = panelCategories.getSelectionModel().getSelectedItem();
         if (target == null) return;
         taskList.clear();
@@ -89,7 +90,46 @@ public class HomeController {
         panelTasks.setItems(taskList);
     }
 
-    public void clickShowAllTasksButton() {
+    @FXML
+    private void clickShowAllTasksButton() {
         updateTaskList();
     }
+
+    public void renameCategory(Category category) throws IOException {
+        UserDataContainer.getInstance().storeCategoryID(category.getId());
+
+        FXMLLoader fxmlLoader = new FXMLLoader(ToDoApp.class.getResource("editCategoryForm.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        Stage stage = new Stage();
+        stage.setTitle("Edit " + category);
+        stage.setScene(scene);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.show();
+    }
+
+    public void deleteCategory(Category category) {
+        CategoryManager.getInstance().deleteCategory(category.getId());
+    }
+
+    public void completeTask(Task task) {
+        TaskManager.getInstance().completeTask(task.getId(), true);
+    }
+
+    public void editTask(Task task) throws IOException {
+        UserDataContainer.getInstance().storeTaskID(task.getId());
+
+        FXMLLoader fxmlLoader = new FXMLLoader(ToDoApp.class.getResource("editTaskForm.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        Stage stage = new Stage();
+        stage.setTitle("Edit " + task.getName());
+        stage.setScene(scene);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.show();
+    }
+
+    public void deleteTask(Task task) {
+        TaskManager.getInstance().deleteTask(task.getId());
+    }
+
+
 }
