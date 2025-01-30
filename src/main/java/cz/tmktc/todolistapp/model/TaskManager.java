@@ -30,13 +30,20 @@ public class TaskManager implements Observable {
         notifyObserver();
     }
 
-    public void updateTask(int id, String name, LocalDate dueDate, boolean completed) {
+    public void updateTask(int id, String name, Category category, LocalDate dueDate) {
         for (Task task: taskList) {
             if (task.getId() == id) {
                 task.setName(name);
+                task.setCategory(category);
                 task.setDueDate(dueDate);
-                task.setCompleted(completed);
             }
+        }
+        notifyObserver();
+    }
+
+    public void completeTask(int id, boolean complete) {
+        for (Task task: taskList) {
+            if (task.getId() == id) task.setCompleted(complete);
         }
         notifyObserver();
     }
