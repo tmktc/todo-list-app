@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0"
+          prefWidth="400.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="cz.tmktc.todolistapp.controller.EditCategoryFormController">
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES"/>
+        <ColumnConstraints hgrow="SOMETIMES"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="NEVER"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+    </rowConstraints>
+    <Button fx:id="buttonEdit" mnemonicParsing="false" onMouseClicked="#clickEditButton" text="Edit"
+            GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="2"/>
+    <Label text="Name" GridPane.halignment="CENTER"/>
+    <TextField fx:id="fieldName" GridPane.columnIndex="1"/>
+    <Label fx:id="labelWarning" textFill="RED" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <font>
+          <Font name="Source Code Pro" size="14.0"/>
+        </font>
+    </Label>
+</GridPane>
