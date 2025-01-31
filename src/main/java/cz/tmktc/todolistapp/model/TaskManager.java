@@ -40,15 +40,15 @@ public class TaskManager implements Observable {
         notifyObserver();
     }
 
+    public void delete(int id) {
+        taskList.removeIf(task -> task.getId() == id);
+        notifyObserver();
+    }
+
     public void complete(int id, boolean complete) {
         for (Task task : taskList) {
             if (task.getId() == id) task.setCompleted(complete);
         }
-        notifyObserver();
-    }
-
-    public void delete(int id) {
-        taskList.removeIf(task -> task.getId() == id);
         notifyObserver();
     }
 

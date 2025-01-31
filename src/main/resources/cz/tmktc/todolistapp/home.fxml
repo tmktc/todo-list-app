@@ -3,56 +3,64 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<GridPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="500.0" prefWidth="1000.0"
-          xmlns="http://javafx.com/javafx/17.0.12" fx:controller="cz.tmktc.todolistapp.controller.HomeController">
+
+<GridPane prefHeight="500.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cz.tmktc.todolistapp.controller.HomeController">
     <columnConstraints>
-        <ColumnConstraints hgrow="SOMETIMES"/>
+        <ColumnConstraints hgrow="SOMETIMES" />
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints vgrow="SOMETIMES"/>
-        <RowConstraints minHeight="-Infinity" vgrow="NEVER"/>
+        <RowConstraints vgrow="SOMETIMES" />
+        <RowConstraints minHeight="-Infinity" vgrow="NEVER" />
     </rowConstraints>
-    <SplitPane dividerPositions="0.3">
+    <SplitPane dividerPositions="0.24248496993987975">
         <VBox>
             <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Categories">
                 <font>
-                    <Font name="Source Code Pro" size="18.0"/>
+                    <Font name="Source Code Pro" size="18.0" />
                 </font>
             </Label>
-            <Button fx:id="buttonNewCategory" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                    onMouseClicked="#clickNewCategoryButton" text="New Category">
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#clickNewCategoryButton" text="New Category">
                 <font>
-                    <Font name="Source Code Pro" size="14.0"/>
+                    <Font name="Source Code Pro" size="14.0" />
                 </font>
             </Button>
-            <ListView fx:id="panelCategories" onMouseClicked="#clickCategoryPanel" VBox.vgrow="ALWAYS"/>
-            <Button fx:id="buttonShowAllTasks" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                    onMouseClicked="#clickShowAllTasksButton" text="Show all tasks">
-                <font>
-                    <Font name="Source Code Pro" size="12.0"/>
-                </font>
-            </Button>
+            <ListView fx:id="panelCategories" onMouseClicked="#clickCategoryPanel" VBox.vgrow="ALWAYS" />
         </VBox>
         <VBox>
             <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Tasks">
                 <font>
-                    <Font name="Source Code Pro" size="18.0"/>
+                    <Font name="Source Code Pro" size="18.0" />
                 </font>
             </Label>
             <TableView fx:id="tableTasks" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn fx:id="columnCategory" minWidth="-1.0" prefWidth="100.0" text="Category"/>
-                    <TableColumn fx:id="columnTask" minWidth="-1.0" prefWidth="400.0" text="Task"/>
-                    <TableColumn fx:id="columnDueDate" minWidth="-1.0" prefWidth="100.0" text="Due Date"/>
-                    <TableColumn fx:id="columnStatus" minWidth="-1.0" prefWidth="100.0" text="Completed"/>
+                    <TableColumn fx:id="columnCategory" minWidth="-1.0" prefWidth="100.0" text="Category" />
+                    <TableColumn fx:id="columnTask" minWidth="-1.0" prefWidth="400.0" text="Task" />
+                    <TableColumn fx:id="columnDueDate" minWidth="-1.0" prefWidth="150.0" text="Due Date" />
+                    <TableColumn fx:id="columnStatus" minWidth="-1.0" prefWidth="100.0" text="Completed" />
                 </columns>
             </TableView>
+            <HBox alignment="CENTER">
+                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                        onMouseClicked="#clickShowAllTasksButton" text="Show all tasks">
+                    <font>
+                        <Font name="Source Code Pro" size="12.0"/>
+                    </font>
+                </Button>
+                <Button mnemonicParsing="false" onMouseClicked="#clickShowOnlyCompletedTasks"
+                        text="Show only completed tasks">
+                    <font>
+                        <Font name="Source Code Pro" size="12.0"/>
+                    </font>
+                </Button>
+                <Button mnemonicParsing="false" onMouseClicked="#clickShowOnlyNotCompletedTasks"
+                        text="Show only not completed tasks"/>
+            </HBox>
         </VBox>
     </SplitPane>
-    <Button fx:id="buttonNewTask" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-            onMouseClicked="#clickNewTaskButton" text="New Task" GridPane.rowIndex="1">
+    <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#clickNewTaskButton" text="New Task" GridPane.rowIndex="1">
         <font>
-            <Font name="Source Code Pro" size="18.0"/>
+            <Font name="Source Code Pro" size="18.0" />
         </font>
     </Button>
 </GridPane>

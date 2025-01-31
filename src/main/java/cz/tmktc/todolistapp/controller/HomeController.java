@@ -61,11 +61,14 @@ public class HomeController {
                     final TableRow<Task> row = new TableRow<>();
                     final ContextMenu rowMenu = new ContextMenu();
 
-                    MenuItem markCompleted = new MenuItem("Mark Completed");
+                    MenuItem markComplete = new MenuItem("Mark Complete");
+                    MenuItem markNotComplete = new MenuItem("Mark Not Complete");
                     MenuItem edit = new MenuItem("Edit");
                     MenuItem delete = new MenuItem("Delete");
 
-                    markCompleted.setOnAction(actionEvent -> completeTask(row.getItem().getId()));
+                    markComplete.setOnAction(actionEvent -> completeTask(row.getItem().getId(), true));
+                    markNotComplete.setOnAction(actionEvent -> completeTask(row.getItem().getId(), false));
+
                     edit.setOnAction(actionEvent -> {
                         try {
                             editTask(row.getItem().getId());
@@ -74,7 +77,8 @@ public class HomeController {
                         }
                     });
                     delete.setOnAction(actionEvent -> deleteTask(row.getItem().getId()));
-                    rowMenu.getItems().addAll(markCompleted, edit, delete);
+
+                    rowMenu.getItems().addAll(markComplete, markNotComplete, edit, delete);
 
                     //only display context menu for non-null items
                     row.contextMenuProperty().bind(
@@ -154,8 +158,8 @@ public class HomeController {
         CategoryManager.getInstance().delete(categoryID);
     }
 
-    public void completeTask(int taskID) {
-        TaskManager.getInstance().complete(taskID, true);
+    public void completeTask(int taskID, boolean status) {
+        TaskManager.getInstance().complete(taskID, status);
     }
 
     public void editTask(int taskID) throws IOException {
@@ -172,5 +176,23 @@ public class HomeController {
 
     public void deleteTask(int taskID) {
         TaskManager.getInstance().delete(taskID);
+    }
+
+    @FXML
+    private void clickShowOnlyCompletedTasks() {
+        taskList.clear();
+        taskList.addAll(TaskManager.getInstance().taskList.stream()
+                .filter(Task::isCompleted).toList());
+
+        tableTasks.setItems(taskList);
+    }
+
+    @FXML
+    private void clickShowOnlyNotCompletedTasks() {
+        taskList.clear();
+        taskList.addAll(TaskManager.getInstance().taskList.stream()
+                .filter(task -> !task.isCompleted()).toList());
+
+        tableTasks.setItems(taskList);
     }
 }
