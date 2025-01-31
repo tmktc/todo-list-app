@@ -20,11 +20,16 @@ public class EditCategoryFormController {
     private TextField fieldName;
 
     @FXML
+    private void initialize() {
+        fieldName.setText(UserDataContainer.getInstance().getCategory().getName());
+    }
+
+    @FXML
     private void clickEditButton() {
         if (fieldName.getText().isEmpty()) {
             labelWarning.setText("Category name can not be empty");
         } else {
-            CategoryManager.getInstance().updateCategory(UserDataContainer.getInstance().getCategoryID(), fieldName.getText());
+            CategoryManager.getInstance().updateCategory(UserDataContainer.getInstance().getCategory().getId(), fieldName.getText());
             Stage stage = (Stage) buttonEdit.getScene().getWindow();
             stage.close();
         }

@@ -24,12 +24,12 @@ public class ListCellCategory extends ListCell<Category> {
 
             rename.setOnAction(event -> {
                 try {
-                    homeController.renameCategory(category);
+                    homeController.renameCategory(category.getId());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
             });
-            delete.setOnAction(event -> homeController.deleteCategory(category));
+            delete.setOnAction(event -> homeController.deleteCategory(category.getId()));
 
             setContextMenu(new ContextMenu(rename, delete));
 

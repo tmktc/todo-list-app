@@ -29,14 +29,15 @@ public class NewTaskFormController {
     private final ObservableList<Category> categories = FXCollections.observableArrayList();
 
     @FXML
-    public void initialize() {
+    private void initialize() {
 
         categories.addAll(CategoryManager.getInstance().categoryList);
 
         boxCategory.setItems(categories);
     }
 
-    public void clickCreateButton() {
+    @FXML
+    private void clickCreateButton() {
 
         if (fieldName.getText().isEmpty() || boxCategory.getValue() == null || datePickerDueDate.getValue() == null) {
             labelWarning.setText("All fields have to be filled");

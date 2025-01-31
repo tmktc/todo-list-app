@@ -28,7 +28,7 @@ public class HomeController {
     private final ObservableList<Task> taskList = FXCollections.observableArrayList();
 
     @FXML
-    public void initialize() {
+    private void initialize() {
         TaskManager.getInstance().register(ChangeType.TASKS_CHANGE, this::updateTaskList);
         CategoryManager.getInstance().register(ChangeType.CATEGORIES_CHANGE, () -> {
             updateCategoryList();
@@ -95,41 +95,39 @@ public class HomeController {
         updateTaskList();
     }
 
-    public void renameCategory(Category category) throws IOException {
-        UserDataContainer.getInstance().storeCategoryID(category.getId());
+    public void renameCategory(int categoryID) throws IOException {
+        UserDataContainer.getInstance().storeCategory(categoryID);
 
         FXMLLoader fxmlLoader = new FXMLLoader(ToDoApp.class.getResource("editCategoryForm.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = new Stage();
-        stage.setTitle("Edit " + category);
+        stage.setTitle("Edit category");
         stage.setScene(scene);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
     }
 
-    public void deleteCategory(Category category) {
-        CategoryManager.getInstance().deleteCategory(category.getId());
+    public void deleteCategory(int categoryID) {
+        CategoryManager.getInstance().deleteCategory(categoryID);
     }
 
-    public void completeTask(Task task) {
-        TaskManager.getInstance().completeTask(task.getId(), true);
+    public void completeTask(int taskID) {
+        TaskManager.getInstance().completeTask(taskID, true);
     }
 
-    public void editTask(Task task) throws IOException {
-        UserDataContainer.getInstance().storeTaskID(task.getId());
+    public void editTask(int taskID) throws IOException {
+        UserDataContainer.getInstance().storeTask(taskID);
 
         FXMLLoader fxmlLoader = new FXMLLoader(ToDoApp.class.getResource("editTaskForm.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = new Stage();
-        stage.setTitle("Edit " + task.getName());
+        stage.setTitle("Edit task");
         stage.setScene(scene);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
     }
 
-    public void deleteTask(Task task) {
-        TaskManager.getInstance().deleteTask(task.getId());
+    public void deleteTask(int taskID) {
+        TaskManager.getInstance().deleteTask(taskID);
     }
-
-
 }

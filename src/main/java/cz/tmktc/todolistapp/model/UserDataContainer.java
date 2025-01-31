@@ -2,12 +2,12 @@ package cz.tmktc.todolistapp.model;
 
 public class UserDataContainer {
     private static UserDataContainer userDataContainer = null;
-    private int categoryID;
-    private int taskID;
+    private Category category;
+    private Task task;
 
     private UserDataContainer() {
-        categoryID = 0;
-        taskID = 0;
+        category = null;
+        task = null;
     }
 
     public static UserDataContainer getInstance() {
@@ -15,19 +15,23 @@ public class UserDataContainer {
         return userDataContainer;
     }
 
-    public void storeCategoryID(int id) {
-        this.categoryID = id;
+    public void storeCategory(int id) {
+        for (Category c : CategoryManager.getInstance().categoryList) {
+            if (c.getId() == id) this.category = c;
+        }
     }
 
-    public void storeTaskID(int id) {
-        this.taskID = id;
+    public void storeTask(int id) {
+        for (Task t: TaskManager.getInstance().taskList) {
+            if (t.getId() == id) this.task = t;
+        }
     }
 
-    public int getCategoryID() {
-        return categoryID;
+    public Category getCategory() {
+        return category;
     }
 
-    public int getTaskID() {
-        return taskID;
+    public Task getTask() {
+        return task;
     }
 }

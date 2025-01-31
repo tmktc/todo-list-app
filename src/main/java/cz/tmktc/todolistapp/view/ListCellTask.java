@@ -23,15 +23,15 @@ public class ListCellTask extends ListCell<Task> {
             MenuItem edit = new MenuItem("Edit");
             MenuItem delete = new MenuItem("Delete");
 
-            markCompleted.setOnAction(event -> homeController.completeTask(task));
+            markCompleted.setOnAction(event -> homeController.completeTask(task.getId()));
             edit.setOnAction(event -> {
                 try {
-                    homeController.editTask(task);
+                    homeController.editTask(task.getId());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
             });
-            delete.setOnAction(event -> homeController.deleteTask(task));
+            delete.setOnAction(event -> homeController.deleteTask(task.getId()));
 
             setContextMenu(new ContextMenu(markCompleted, edit, delete));
 

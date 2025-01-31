@@ -12,7 +12,6 @@ public class TaskManager implements Observable {
     public final List<Task> taskList;
     private final Map<ChangeType, Set<Observer>> listOfObservers = new HashMap<>();
 
-
     private TaskManager() {
         taskList = new ArrayList<>();
         for (ChangeType changeType : ChangeType.values()) {
