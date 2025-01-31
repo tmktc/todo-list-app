@@ -5,6 +5,7 @@ import cz.tmktc.todolistapp.model.Category;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.MenuItem;
+import javafx.scene.text.Font;
 
 import java.io.IOException;
 
@@ -32,8 +33,7 @@ public class ListCellCategory extends ListCell<Category> {
             delete.setOnAction(event -> homeController.deleteCategory(category.getId()));
 
             setContextMenu(new ContextMenu(rename, delete));
-
-
+            setFont(Font.font(15));
         }
     }
 }
