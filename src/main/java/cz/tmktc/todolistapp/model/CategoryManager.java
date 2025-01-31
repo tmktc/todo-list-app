@@ -39,7 +39,6 @@ public class CategoryManager implements Observable {
 
     public void delete(int id) {
         TaskManager.getInstance().taskList.removeIf(task -> task.getCategory().getId() == id);
-
         categoryList.removeIf(category -> category.getId() == id);
 
         notifyObserver();

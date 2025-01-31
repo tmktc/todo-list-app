@@ -23,6 +23,8 @@ public class HomeController {
     private final ObservableList<Category> categoryList = FXCollections.observableArrayList();
     private final ObservableList<Task> taskList = FXCollections.observableArrayList();
     @FXML
+    private ChoiceBox<String> boxMode;
+    @FXML
     private TableView<Task> tableTasks;
     @FXML
     private TableColumn<Task, Category> columnCategory;
@@ -35,17 +37,24 @@ public class HomeController {
     @FXML
     private ListView<Category> panelCategories;
 
+    //TODO sort methods
+
     @FXML
     private void initialize() {
-        TaskManager.getInstance().register(ChangeType.TASKS_CHANGE, this::updateTaskList);
+        TaskManager.getInstance().register(ChangeType.TASKS_CHANGE, () -> {
+            updateTaskList();
+            chooseMode();
+        });
         CategoryManager.getInstance().register(ChangeType.CATEGORIES_CHANGE, () -> {
             updateCategoryList();
             updateTaskList();
+            chooseMode();
         });
 
         updateCategoryList();
         updateTaskList();
         setupTasksTable();
+        filterModeBoxSetup();
 
         panelCategories.setCellFactory(param -> new ListCellCategory());
         columnCategory.setCellValueFactory(new PropertyValueFactory<>("category"));
@@ -91,6 +100,14 @@ public class HomeController {
     }
 
     @FXML
+    private void filterModeBoxSetup() {
+        ObservableList<String> modes = FXCollections.observableArrayList();
+        modes.addAll("Show all tasks", "Show only unfinished tasks", "Show only completed tasks");
+        boxMode.setItems(modes);
+        boxMode.getSelectionModel().select(0);
+    }
+
+    @FXML
     private void clickNewTaskButton() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(ToDoApp.class.getResource("newTaskForm.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
@@ -128,6 +145,7 @@ public class HomeController {
 
     @FXML
     private void clickCategoryPanel() {
+        //TODO take filter mode into account
         Category target = panelCategories.getSelectionModel().getSelectedItem();
         if (target == null) return;
         taskList.clear();
@@ -135,11 +153,6 @@ public class HomeController {
                 .filter(task -> task.getCategory().getId() == target.getId()).toList());
 
         tableTasks.setItems(taskList);
-    }
-
-    @FXML
-    private void clickShowAllTasksButton() {
-        updateTaskList();
     }
 
     public void renameCategory(int categoryID) throws IOException {
@@ -178,8 +191,16 @@ public class HomeController {
         TaskManager.getInstance().delete(taskID);
     }
 
+    public void chooseMode() {
+        switch (boxMode.getValue()) {
+            case "Show all tasks" -> updateTaskList();
+            case "Show only unfinished tasks" -> showOnlyUnfinishedTasksMode();
+            case "Show only completed tasks" -> showOnlyCompletedTasksMode();
+        }
+    }
+
     @FXML
-    private void clickShowOnlyCompletedTasks() {
+    private void showOnlyCompletedTasksMode() {
         taskList.clear();
         taskList.addAll(TaskManager.getInstance().taskList.stream()
                 .filter(Task::isCompleted).toList());
@@ -188,7 +209,7 @@ public class HomeController {
     }
 
     @FXML
-    private void clickShowOnlyNotCompletedTasks() {
+    private void showOnlyUnfinishedTasksMode() {
         taskList.clear();
         taskList.addAll(TaskManager.getInstance().taskList.stream()
                 .filter(task -> !task.isCompleted()).toList());
