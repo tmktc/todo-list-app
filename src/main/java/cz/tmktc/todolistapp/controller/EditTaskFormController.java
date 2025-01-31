@@ -8,29 +8,21 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class EditTaskFormController {
 
+    private final ObservableList<Category> categories = FXCollections.observableArrayList();
     @FXML
     private Label labelWarning;
-
     @FXML
     private TextField fieldName;
-
     @FXML
     private DatePicker datePickerDueDate;
-
     @FXML
     private ChoiceBox<Category> boxCategory;
-
     @FXML
     private Button buttonEdit;
-
-    private final ObservableList<Category> categories = FXCollections.observableArrayList();
 
     @FXML
     private void initialize() {
@@ -48,7 +40,7 @@ public class EditTaskFormController {
         if (fieldName.getText().isEmpty() || boxCategory.getValue() == null || datePickerDueDate.getValue() == null) {
             labelWarning.setText("All fields have to be filled");
         } else {
-            TaskManager.getInstance().updateTask(UserDataContainer.getInstance().getTask().getId(), fieldName.getText(), boxCategory.getValue(), datePickerDueDate.getValue());
+            TaskManager.getInstance().update(UserDataContainer.getInstance().getTask().getId(), fieldName.getText(), boxCategory.getValue(), datePickerDueDate.getValue());
             Stage stage = (Stage) buttonEdit.getScene().getWindow();
             stage.close();
         }

@@ -2,10 +2,10 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0"
-          prefWidth="400.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+<?import javafx.scene.text.Font?>
+<GridPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+          minWidth="-Infinity"
+          prefHeight="200.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/17.0.12"
           fx:controller="cz.tmktc.todolistapp.controller.NewTaskFormController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES"/>
@@ -35,7 +35,7 @@
             GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
     <Label fx:id="labelWarning" textFill="RED" GridPane.columnIndex="1" GridPane.rowIndex="3">
         <font>
-          <Font name="Source Code Pro" size="14.0"/>
+            <Font name="Source Code Pro" size="14.0"/>
         </font>
     </Label>
 </GridPane>

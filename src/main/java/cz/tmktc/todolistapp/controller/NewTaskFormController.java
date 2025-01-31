@@ -11,22 +11,17 @@ import javafx.stage.Stage;
 
 public class NewTaskFormController {
 
+    private final ObservableList<Category> categories = FXCollections.observableArrayList();
     @FXML
     private Label labelWarning;
-
     @FXML
     private TextField fieldName;
-
     @FXML
     private DatePicker datePickerDueDate;
-
     @FXML
     private ChoiceBox<Category> boxCategory;
-
     @FXML
     private Button buttonCreate;
-
-    private final ObservableList<Category> categories = FXCollections.observableArrayList();
 
     @FXML
     private void initialize() {
@@ -42,7 +37,7 @@ public class NewTaskFormController {
         if (fieldName.getText().isEmpty() || boxCategory.getValue() == null || datePickerDueDate.getValue() == null) {
             labelWarning.setText("All fields have to be filled");
         } else {
-            TaskManager.getInstance().createTask(fieldName.getText(), boxCategory.getValue(), datePickerDueDate.getValue());
+            TaskManager.getInstance().create(fieldName.getText(), boxCategory.getValue(), datePickerDueDate.getValue());
             Stage stage = (Stage) buttonCreate.getScene().getWindow();
             stage.close();
         }

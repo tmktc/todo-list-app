@@ -1,12 +1,12 @@
 package cz.tmktc.todolistapp.model;
 
 public class Category {
+    private static int idCounter;
     private final int id;
     private String name;
-    private static int idCounter;
 
     public Category(String name) {
-        this.id = (idCounter+1);
+        this.id = (idCounter + 1);
         this.name = name;
         idCounter++;
     }

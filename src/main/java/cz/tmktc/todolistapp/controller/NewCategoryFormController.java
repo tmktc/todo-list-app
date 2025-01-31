@@ -24,7 +24,7 @@ public class NewCategoryFormController {
         if (fieldName.getText().isEmpty()) {
             labelWarning.setText("Category name can not be empty");
         } else {
-            CategoryManager.getInstance().createCategory(fieldName.getText());
+            CategoryManager.getInstance().create(fieldName.getText());
             Stage stage = (Stage) buttonCreate.getScene().getWindow();
             stage.close();
         }

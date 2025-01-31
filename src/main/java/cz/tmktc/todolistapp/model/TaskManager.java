@@ -24,13 +24,13 @@ public class TaskManager implements Observable {
         return taskManager;
     }
 
-    public void createTask(String name, Category category, LocalDate dueDate) {
+    public void create(String name, Category category, LocalDate dueDate) {
         taskList.add(new Task(name, category, dueDate));
         notifyObserver();
     }
 
-    public void updateTask(int id, String name, Category category, LocalDate dueDate) {
-        for (Task task: taskList) {
+    public void update(int id, String name, Category category, LocalDate dueDate) {
+        for (Task task : taskList) {
             if (task.getId() == id) {
                 task.setName(name);
                 task.setCategory(category);
@@ -40,14 +40,14 @@ public class TaskManager implements Observable {
         notifyObserver();
     }
 
-    public void completeTask(int id, boolean complete) {
-        for (Task task: taskList) {
+    public void complete(int id, boolean complete) {
+        for (Task task : taskList) {
             if (task.getId() == id) task.setCompleted(complete);
         }
         notifyObserver();
     }
 
-    public void deleteTask (int id) {
+    public void delete(int id) {
         taskList.removeIf(task -> task.getId() == id);
         notifyObserver();
     }

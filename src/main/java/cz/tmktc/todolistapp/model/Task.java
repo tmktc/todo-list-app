@@ -3,15 +3,15 @@ package cz.tmktc.todolistapp.model;
 import java.time.LocalDate;
 
 public class Task {
+    private static int idCounter;
     private final int id;
     private Category category;
     private String name;
     private LocalDate dueDate;
     private boolean completed;
-    private static int idCounter;
 
     public Task(String name, Category category, LocalDate dueDate) {
-        this.id = (idCounter+1);
+        this.id = (idCounter + 1);
         this.category = category;
         this.name = name;
         this.dueDate = dueDate;

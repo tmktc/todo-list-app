@@ -23,13 +23,13 @@ public class CategoryManager implements Observable {
         return categoryManager;
     }
 
-    public void createCategory(String name) {
+    public void create(String name) {
         categoryList.add(new Category(name));
         notifyObserver();
     }
 
-    public void updateCategory(int id, String name) {
-        for (Category category: categoryList) {
+    public void update(int id, String name) {
+        for (Category category : categoryList) {
             if (category.getId() == id) {
                 category.setName(name);
             }
@@ -37,7 +37,7 @@ public class CategoryManager implements Observable {
         notifyObserver();
     }
 
-    public void deleteCategory(int id) {
+    public void delete(int id) {
         TaskManager.getInstance().taskList.removeIf(task -> task.getCategory().getId() == id);
 
         categoryList.removeIf(category -> category.getId() == id);

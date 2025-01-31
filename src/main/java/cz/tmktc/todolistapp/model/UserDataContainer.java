@@ -22,7 +22,7 @@ public class UserDataContainer {
     }
 
     public void storeTask(int id) {
-        for (Task t: TaskManager.getInstance().taskList) {
+        for (Task t : TaskManager.getInstance().taskList) {
             if (t.getId() == id) this.task = t;
         }
     }

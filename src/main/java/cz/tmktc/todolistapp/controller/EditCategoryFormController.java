@@ -29,7 +29,7 @@ public class EditCategoryFormController {
         if (fieldName.getText().isEmpty()) {
             labelWarning.setText("Category name can not be empty");
         } else {
-            CategoryManager.getInstance().updateCategory(UserDataContainer.getInstance().getCategory().getId(), fieldName.getText());
+            CategoryManager.getInstance().update(UserDataContainer.getInstance().getCategory().getId(), fieldName.getText());
             Stage stage = (Stage) buttonEdit.getScene().getWindow();
             stage.close();
         }
