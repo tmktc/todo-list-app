@@ -4,28 +4,36 @@ import cz.tmktc.todolistapp.ToDoApp;
 import cz.tmktc.todolistapp.model.*;
 import cz.tmktc.todolistapp.model.observer.ChangeType;
 import cz.tmktc.todolistapp.view.ListCellCategory;
-import cz.tmktc.todolistapp.view.ListCellTask;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 public class HomeController {
 
-    @FXML
-    private ListView<Task> panelTasks;
-
-    @FXML
-    private ListView<Category> panelCategories;
-
     private final ObservableList<Category> categoryList = FXCollections.observableArrayList();
     private final ObservableList<Task> taskList = FXCollections.observableArrayList();
+    @FXML
+    private TableView<Task> tableTasks;
+    @FXML
+    private TableColumn<Task, Category> columnCategory;
+    @FXML
+    private TableColumn<Task, String> columnTask;
+    @FXML
+    private TableColumn<Task, LocalDate> columnDueDate;
+    @FXML
+    private TableColumn<Task, Boolean> columnStatus;
+    @FXML
+    private ListView<Category> panelCategories;
 
     @FXML
     private void initialize() {
@@ -37,11 +45,46 @@ public class HomeController {
 
         updateCategoryList();
         updateTaskList();
+        setupTasksTable();
 
         panelCategories.setCellFactory(param -> new ListCellCategory());
-        panelTasks.setCellFactory(param -> new ListCellTask());
+        columnCategory.setCellValueFactory(new PropertyValueFactory<>("category"));
+        columnTask.setCellValueFactory(new PropertyValueFactory<>("name"));
+        columnDueDate.setCellValueFactory(new PropertyValueFactory<>("dueDate"));
+        columnStatus.setCellValueFactory(new PropertyValueFactory<>("completed"));
     }
 
+    @FXML
+    private void setupTasksTable() {
+        tableTasks.setRowFactory(
+                tableView -> {
+                    final TableRow<Task> row = new TableRow<>();
+                    final ContextMenu rowMenu = new ContextMenu();
+
+                    MenuItem markCompleted = new MenuItem("Mark Completed");
+                    MenuItem edit = new MenuItem("Edit");
+                    MenuItem delete = new MenuItem("Delete");
+
+                    markCompleted.setOnAction(actionEvent -> completeTask(row.getItem().getId()));
+                    edit.setOnAction(actionEvent -> {
+                        try {
+                            editTask(row.getItem().getId());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+                    delete.setOnAction(actionEvent -> deleteTask(row.getItem().getId()));
+                    rowMenu.getItems().addAll(markCompleted, edit, delete);
+
+                    //only display context menu for non-null items
+                    row.contextMenuProperty().bind(
+                            Bindings.when(Bindings.isNotNull(row.itemProperty()))
+                                    .then(rowMenu)
+                                    .otherwise((ContextMenu) null));
+                    return row;
+                }
+        );
+    }
 
     @FXML
     private void clickNewTaskButton() throws IOException {
@@ -76,7 +119,7 @@ public class HomeController {
     private void updateTaskList() {
         taskList.clear();
         taskList.addAll(TaskManager.getInstance().taskList);
-        panelTasks.setItems(taskList);
+        tableTasks.setItems(taskList);
     }
 
     @FXML
@@ -87,7 +130,7 @@ public class HomeController {
         taskList.addAll(TaskManager.getInstance().taskList.stream()
                 .filter(task -> task.getCategory().getId() == target.getId()).toList());
 
-        panelTasks.setItems(taskList);
+        tableTasks.setItems(taskList);
     }
 
     @FXML
@@ -108,11 +151,11 @@ public class HomeController {
     }
 
     public void deleteCategory(int categoryID) {
-        CategoryManager.getInstance().deleteCategory(categoryID);
+        CategoryManager.getInstance().delete(categoryID);
     }
 
     public void completeTask(int taskID) {
-        TaskManager.getInstance().completeTask(taskID, true);
+        TaskManager.getInstance().complete(taskID, true);
     }
 
     public void editTask(int taskID) throws IOException {
@@ -128,6 +171,6 @@ public class HomeController {
     }
 
     public void deleteTask(int taskID) {
-        TaskManager.getInstance().deleteTask(taskID);
+        TaskManager.getInstance().delete(taskID);
     }
 }
