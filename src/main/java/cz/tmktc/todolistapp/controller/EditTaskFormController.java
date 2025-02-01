@@ -30,7 +30,7 @@ public class EditTaskFormController {
 
         categories.addAll(CategoryManager.getInstance().categoryList);
         boxCategory.setItems(categories);
-        //TODO set default category choice
+        boxCategory.getSelectionModel().select(UserDataContainer.getInstance().getTask().getCategory());
 
         datePickerDueDate.setValue(UserDataContainer.getInstance().getTask().getDueDate());
     }
