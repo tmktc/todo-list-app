@@ -22,6 +22,7 @@ public class HomeController {
 
     private final ObservableList<Category> categoryList = FXCollections.observableArrayList();
     private final ObservableList<Task> taskList = FXCollections.observableArrayList();
+    private final ObservableList<Task> helperList = FXCollections.observableArrayList();
     @FXML
     private ChoiceBox<String> boxMode;
     @FXML
@@ -37,30 +38,35 @@ public class HomeController {
     @FXML
     private ListView<Category> panelCategories;
 
-    //TODO sort methods
+    private final String allMode = "Show all tasks";
+    private final String unfinishedMode = "Show only unfinished tasks";
+    private final String finishedMode = "Show only finished tasks";
 
     @FXML
     private void initialize() {
-        TaskManager.getInstance().register(ChangeType.TASKS_CHANGE, () -> {
-            updateTaskList();
-            chooseMode();
-        });
+        TaskManager.getInstance().register(ChangeType.TASKS_CHANGE, this::chooseTaskMode);
         CategoryManager.getInstance().register(ChangeType.CATEGORIES_CHANGE, () -> {
             updateCategoryList();
-            updateTaskList();
-            chooseMode();
+            chooseTaskMode();
         });
 
         updateCategoryList();
-        updateTaskList();
         setupTasksTable();
         filterModeBoxSetup();
+        showAllTasksMode();
 
         panelCategories.setCellFactory(param -> new ListCellCategory());
         columnCategory.setCellValueFactory(new PropertyValueFactory<>("category"));
         columnTask.setCellValueFactory(new PropertyValueFactory<>("name"));
         columnDueDate.setCellValueFactory(new PropertyValueFactory<>("dueDate"));
-        columnStatus.setCellValueFactory(new PropertyValueFactory<>("completed"));
+        columnStatus.setCellValueFactory(new PropertyValueFactory<>("finished"));
+    }
+
+    @FXML
+    private void updateCategoryList() {
+        categoryList.clear();
+        categoryList.addAll(CategoryManager.getInstance().categoryList);
+        panelCategories.setItems(categoryList);
     }
 
     @FXML
@@ -70,8 +76,8 @@ public class HomeController {
                     final TableRow<Task> row = new TableRow<>();
                     final ContextMenu rowMenu = new ContextMenu();
 
-                    MenuItem markComplete = new MenuItem("Mark Complete");
-                    MenuItem markNotComplete = new MenuItem("Mark Not Complete");
+                    MenuItem markComplete = new MenuItem("Mark Finished");
+                    MenuItem markNotComplete = new MenuItem("Mark Unfinished");
                     MenuItem edit = new MenuItem("Edit");
                     MenuItem delete = new MenuItem("Delete");
 
@@ -102,20 +108,43 @@ public class HomeController {
     @FXML
     private void filterModeBoxSetup() {
         ObservableList<String> modes = FXCollections.observableArrayList();
-        modes.addAll("Show all tasks", "Show only unfinished tasks", "Show only completed tasks");
+        modes.addAll(allMode, unfinishedMode, finishedMode);
         boxMode.setItems(modes);
         boxMode.getSelectionModel().select(0);
     }
 
     @FXML
-    private void clickNewTaskButton() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(ToDoApp.class.getResource("newTaskForm.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        Stage stage = new Stage();
-        stage.setTitle("New Task");
-        stage.setScene(scene);
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.show();
+    private void chooseTaskMode() {
+        switch (boxMode.getValue()) {
+            case allMode -> showAllTasksMode();
+            case unfinishedMode -> showOnlyUnfinishedTasksMode();
+            case finishedMode -> showOnlyFinishedTasksMode();
+        }
+    }
+
+    @FXML
+    private void showAllTasksMode() {
+        taskList.clear();
+        taskList.addAll(TaskManager.getInstance().taskList);
+        tableTasks.setItems(taskList);
+    }
+
+    @FXML
+    private void showOnlyFinishedTasksMode() {
+        taskList.clear();
+        taskList.addAll(TaskManager.getInstance().taskList.stream()
+                .filter(Task::isFinished).toList());
+
+        tableTasks.setItems(taskList);
+    }
+
+    @FXML
+    private void showOnlyUnfinishedTasksMode() {
+        taskList.clear();
+        taskList.addAll(TaskManager.getInstance().taskList.stream()
+                .filter(task -> !task.isFinished()).toList());
+
+        tableTasks.setItems(taskList);
     }
 
     @FXML
@@ -130,31 +159,30 @@ public class HomeController {
     }
 
     @FXML
-    private void updateCategoryList() {
-        categoryList.clear();
-        categoryList.addAll(CategoryManager.getInstance().categoryList);
-        panelCategories.setItems(categoryList);
-    }
-
-    @FXML
-    private void updateTaskList() {
-        taskList.clear();
-        taskList.addAll(TaskManager.getInstance().taskList);
-        tableTasks.setItems(taskList);
+    private void clickNewTaskButton() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(ToDoApp.class.getResource("newTaskForm.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        Stage stage = new Stage();
+        stage.setTitle("New Task");
+        stage.setScene(scene);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.show();
     }
 
     @FXML
     private void clickCategoryPanel() {
-        //TODO take filter mode into account
         Category target = panelCategories.getSelectionModel().getSelectedItem();
         if (target == null) return;
         taskList.clear();
-        taskList.addAll(TaskManager.getInstance().taskList.stream()
-                .filter(task -> task.getCategory().getId() == target.getId()).toList());
+        helperList.clear();
+        chooseTaskMode();
+        helperList.addAll(tableTasks.getItems().stream()
+                .filter(task -> task.getCategory() == target).toList());
 
-        tableTasks.setItems(taskList);
+        tableTasks.setItems(helperList);
     }
 
+    @FXML
     public void renameCategory(int categoryID) throws IOException {
         UserDataContainer.getInstance().storeCategory(categoryID);
 
@@ -175,6 +203,7 @@ public class HomeController {
         TaskManager.getInstance().complete(taskID, status);
     }
 
+    @FXML
     public void editTask(int taskID) throws IOException {
         UserDataContainer.getInstance().storeTask(taskID);
 
@@ -189,31 +218,5 @@ public class HomeController {
 
     public void deleteTask(int taskID) {
         TaskManager.getInstance().delete(taskID);
-    }
-
-    public void chooseMode() {
-        switch (boxMode.getValue()) {
-            case "Show all tasks" -> updateTaskList();
-            case "Show only unfinished tasks" -> showOnlyUnfinishedTasksMode();
-            case "Show only completed tasks" -> showOnlyCompletedTasksMode();
-        }
-    }
-
-    @FXML
-    private void showOnlyCompletedTasksMode() {
-        taskList.clear();
-        taskList.addAll(TaskManager.getInstance().taskList.stream()
-                .filter(Task::isCompleted).toList());
-
-        tableTasks.setItems(taskList);
-    }
-
-    @FXML
-    private void showOnlyUnfinishedTasksMode() {
-        taskList.clear();
-        taskList.addAll(TaskManager.getInstance().taskList.stream()
-                .filter(task -> !task.isCompleted()).toList());
-
-        tableTasks.setItems(taskList);
     }
 }
