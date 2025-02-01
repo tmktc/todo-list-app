@@ -44,15 +44,15 @@ public class HomeController {
 
     @FXML
     private void initialize() {
-        TaskManager.getInstance().register(ChangeType.TASKS_CHANGE, this::chooseTaskMode);
+        TaskManager.getInstance().register(ChangeType.TASKS_CHANGE, this::chooseTaskFilterMode);
         CategoryManager.getInstance().register(ChangeType.CATEGORIES_CHANGE, () -> {
             updateCategoryList();
-            chooseTaskMode();
+            chooseTaskFilterMode();
         });
 
         updateCategoryList();
         setupTasksTable();
-        filterModeBoxSetup();
+        taskFilterModeChoiceBoxSetup();
         showAllTasksMode();
 
         panelCategories.setCellFactory(param -> new ListCellCategory());
@@ -106,7 +106,7 @@ public class HomeController {
     }
 
     @FXML
-    private void filterModeBoxSetup() {
+    private void taskFilterModeChoiceBoxSetup() {
         ObservableList<String> modes = FXCollections.observableArrayList();
         modes.addAll(allMode, unfinishedMode, finishedMode);
         boxMode.setItems(modes);
@@ -114,7 +114,7 @@ public class HomeController {
     }
 
     @FXML
-    private void chooseTaskMode() {
+    private void chooseTaskFilterMode() {
         switch (boxMode.getValue()) {
             case allMode -> showAllTasksMode();
             case unfinishedMode -> showOnlyUnfinishedTasksMode();
@@ -175,7 +175,7 @@ public class HomeController {
         if (target == null) return;
         taskList.clear();
         helperList.clear();
-        chooseTaskMode();
+        chooseTaskFilterMode();
         helperList.addAll(tableTasks.getItems().stream()
                 .filter(task -> task.getCategory() == target).toList());
 
