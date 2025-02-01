@@ -8,14 +8,14 @@ public class Task {
     private Category category;
     private String name;
     private LocalDate dueDate;
-    private boolean completed;
+    private boolean finished;
 
     public Task(String name, Category category, LocalDate dueDate) {
         this.id = (idCounter + 1);
         this.category = category;
         this.name = name;
         this.dueDate = dueDate;
-        this.completed = false;
+        this.finished = false;
         idCounter++;
     }
 
@@ -47,11 +47,11 @@ public class Task {
         this.dueDate = dueDate;
     }
 
-    public boolean isCompleted() {
-        return completed;
+    public boolean isFinished() {
+        return finished;
     }
 
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
+    public void setFinished(boolean finished) {
+        this.finished = finished;
     }
 }

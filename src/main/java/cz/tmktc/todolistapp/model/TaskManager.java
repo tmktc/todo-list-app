@@ -47,7 +47,7 @@ public class TaskManager implements Observable {
 
     public void complete(int id, boolean complete) {
         for (Task task : taskList) {
-            if (task.getId() == id) task.setCompleted(complete);
+            if (task.getId() == id) task.setFinished(complete);
         }
         notifyObserver();
     }
