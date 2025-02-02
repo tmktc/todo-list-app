@@ -65,7 +65,7 @@ public class HomeController {
     @FXML
     private void updateCategoryList() {
         categoryList.clear();
-        categoryList.addAll(CategoryManager.getInstance().categoryList);
+        categoryList.addAll(CategoryManager.getInstance().categoryList.values());
         panelCategories.setItems(categoryList);
     }
 
@@ -125,14 +125,14 @@ public class HomeController {
     @FXML
     private void showAllTasksMode() {
         taskList.clear();
-        taskList.addAll(TaskManager.getInstance().taskList);
+        taskList.addAll(TaskManager.getInstance().taskList.values());
         tableTasks.setItems(taskList);
     }
 
     @FXML
     private void showOnlyFinishedTasksMode() {
         taskList.clear();
-        taskList.addAll(TaskManager.getInstance().taskList.stream()
+        taskList.addAll(TaskManager.getInstance().taskList.values().stream()
                 .filter(Task::isFinished).toList());
 
         tableTasks.setItems(taskList);
@@ -141,7 +141,7 @@ public class HomeController {
     @FXML
     private void showOnlyUnfinishedTasksMode() {
         taskList.clear();
-        taskList.addAll(TaskManager.getInstance().taskList.stream()
+        taskList.addAll(TaskManager.getInstance().taskList.values().stream()
                 .filter(task -> !task.isFinished()).toList());
 
         tableTasks.setItems(taskList);

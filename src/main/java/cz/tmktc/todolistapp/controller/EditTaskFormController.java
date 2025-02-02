@@ -28,7 +28,7 @@ public class EditTaskFormController {
     private void initialize() {
         fieldName.setText(UserDataContainer.getInstance().getTask().getName());
 
-        categories.addAll(CategoryManager.getInstance().categoryList);
+        categories.addAll(CategoryManager.getInstance().categoryList.values());
         boxCategory.setItems(categories);
         boxCategory.getSelectionModel().select(UserDataContainer.getInstance().getTask().getCategory());
 

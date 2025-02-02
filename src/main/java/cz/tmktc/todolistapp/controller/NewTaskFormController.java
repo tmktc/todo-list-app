@@ -25,7 +25,7 @@ public class NewTaskFormController {
 
     @FXML
     private void initialize() {
-        categories.addAll(CategoryManager.getInstance().categoryList);
+        categories.addAll(CategoryManager.getInstance().categoryList.values());
         boxCategory.setItems(categories);
     }
 

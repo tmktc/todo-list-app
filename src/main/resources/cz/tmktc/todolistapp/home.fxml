@@ -35,7 +35,7 @@
                     <TableColumn fx:id="columnCategory" minWidth="-1.0" prefWidth="100.0" text="Category"/>
                     <TableColumn fx:id="columnTask" minWidth="-1.0" prefWidth="300.0" text="Task"/>
                     <TableColumn fx:id="columnDueDate" minWidth="-1.0" prefWidth="100.0" text="Due Date"/>
-                    <TableColumn fx:id="columnStatus" minWidth="-1.0" prefWidth="90.0" text="Completed"/>
+                    <TableColumn fx:id="columnStatus" minWidth="-1.0" prefWidth="90.0" text="Finished"/>
                 </columns>
             </TableView>
         </VBox>
