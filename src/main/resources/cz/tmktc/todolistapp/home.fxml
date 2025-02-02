@@ -18,7 +18,7 @@
             <Font name="Source Code Pro" size="18.0"/>
         </font>
     </Button>
-    <ChoiceBox fx:id="boxMode" onAction="#chooseTaskFilterMode" GridPane.halignment="RIGHT" GridPane.rowIndex="1"/>
+    <ChoiceBox fx:id="boxTaskFilterMode" onAction="#chooseTaskFilter" GridPane.halignment="RIGHT" GridPane.rowIndex="1"/>
     <SplitPane dividerPositions="0.25" prefHeight="200.0" prefWidth="200.0">
         <VBox>
             <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#clickNewCategoryButton"
@@ -27,7 +27,7 @@
                     <Font name="Source Code Pro" size="18.0"/>
                 </font>
             </Button>
-            <ListView fx:id="panelCategories" onMouseClicked="#clickCategoryPanel" VBox.vgrow="ALWAYS"/>
+            <ListView fx:id="panelCategories" onMouseClicked="#chooseCategoryFilter" VBox.vgrow="ALWAYS"/>
         </VBox>
         <VBox>
             <TableView fx:id="tableTasks" VBox.vgrow="ALWAYS">

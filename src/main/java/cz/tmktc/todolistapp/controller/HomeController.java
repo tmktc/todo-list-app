@@ -21,10 +21,10 @@ import java.time.LocalDate;
 public class HomeController {
 
     private final ObservableList<Category> categoryList = FXCollections.observableArrayList();
-    private final ObservableList<Task> taskList = FXCollections.observableArrayList();
     private final ObservableList<Task> helperList = FXCollections.observableArrayList();
+    private final ObservableList<Task> taskList = FXCollections.observableArrayList();
     @FXML
-    private ChoiceBox<String> boxMode;
+    private ChoiceBox<String> boxTaskFilterMode;
     @FXML
     private TableView<Task> tableTasks;
     @FXML
@@ -39,21 +39,25 @@ public class HomeController {
     private ListView<Category> panelCategories;
 
     private final String allMode = "Show all tasks";
-    private final String unfinishedMode = "Show only unfinished tasks";
-    private final String finishedMode = "Show only finished tasks";
+    private final String unfinishedMode = "Show unfinished tasks";
+    private final String finishedMode = "Show finished tasks";
+
+    private Category currentCategoryFilter;
+    private String currentTaskFilter = allMode;
 
     @FXML
     private void initialize() {
-        TaskManager.getInstance().register(ChangeType.TASKS_CHANGE, this::chooseTaskFilterMode);
+        TaskManager.getInstance().register(ChangeType.TASKS_CHANGE, this::updateTasks);
         CategoryManager.getInstance().register(ChangeType.CATEGORIES_CHANGE, () -> {
-            updateCategoryList();
-            chooseTaskFilterMode();
+            updateCategories();
+            updateTasks();
         });
 
-        updateCategoryList();
-        setupTasksTable();
-        taskFilterModeChoiceBoxSetup();
-        showAllTasksMode();
+        setupTaskTable();
+        setupTaskFilterModeChoiceBox();
+
+        updateCategories();
+        updateTasks();
 
         panelCategories.setCellFactory(param -> new ListCellCategory());
         columnCategory.setCellValueFactory(new PropertyValueFactory<>("category"));
@@ -63,14 +67,14 @@ public class HomeController {
     }
 
     @FXML
-    private void updateCategoryList() {
+    private void updateCategories() {
         categoryList.clear();
         categoryList.addAll(CategoryManager.getInstance().categoryList.values());
         panelCategories.setItems(categoryList);
     }
 
     @FXML
-    private void setupTasksTable() {
+    private void setupTaskTable() {
         tableTasks.setRowFactory(
                 tableView -> {
                     final TableRow<Task> row = new TableRow<>();
@@ -106,45 +110,45 @@ public class HomeController {
     }
 
     @FXML
-    private void taskFilterModeChoiceBoxSetup() {
+    private void setupTaskFilterModeChoiceBox() {
         ObservableList<String> modes = FXCollections.observableArrayList();
         modes.addAll(allMode, unfinishedMode, finishedMode);
-        boxMode.setItems(modes);
-        boxMode.getSelectionModel().select(0);
+        boxTaskFilterMode.setItems(modes);
+        boxTaskFilterMode.getSelectionModel().select(0);
     }
 
     @FXML
-    private void chooseTaskFilterMode() {
-        switch (boxMode.getValue()) {
-            case allMode -> showAllTasksMode();
-            case unfinishedMode -> showOnlyUnfinishedTasksMode();
-            case finishedMode -> showOnlyFinishedTasksMode();
-        }
-    }
-
-    @FXML
-    private void showAllTasksMode() {
+    private void updateTasks() {
         taskList.clear();
-        taskList.addAll(TaskManager.getInstance().taskList.values());
-        tableTasks.setItems(taskList);
+
+        if (currentCategoryFilter != null) {
+            taskList.addAll(TaskManager.getInstance().taskList.values().stream()
+                    .filter(task -> task.getCategory() == currentCategoryFilter).toList());
+        } else taskList.addAll(TaskManager.getInstance().taskList.values());
+        helperList.clear();
+        if (currentTaskFilter.equals(finishedMode)) {
+            helperList.addAll(taskList.stream().filter(Task::isFinished).toList());
+        } else if (currentTaskFilter.equals(unfinishedMode)) {
+            helperList.addAll(taskList.stream().filter(task -> !task.isFinished()).toList());
+        } else helperList.addAll(taskList);
+
+        tableTasks.setItems(helperList);
     }
 
     @FXML
-    private void showOnlyFinishedTasksMode() {
-        taskList.clear();
-        taskList.addAll(TaskManager.getInstance().taskList.values().stream()
-                .filter(Task::isFinished).toList());
+    private void chooseCategoryFilter() {
+        Category target = panelCategories.getSelectionModel().getSelectedItem();
+        if (target == null) return;
 
-        tableTasks.setItems(taskList);
+        if (target == currentCategoryFilter) currentCategoryFilter = null;
+        else currentCategoryFilter = target;
+        updateTasks();
     }
 
     @FXML
-    private void showOnlyUnfinishedTasksMode() {
-        taskList.clear();
-        taskList.addAll(TaskManager.getInstance().taskList.values().stream()
-                .filter(task -> !task.isFinished()).toList());
-
-        tableTasks.setItems(taskList);
+    private void chooseTaskFilter() {
+        currentTaskFilter = boxTaskFilterMode.getValue();
+        updateTasks();
     }
 
     @FXML
@@ -167,19 +171,6 @@ public class HomeController {
         stage.setScene(scene);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
-    }
-
-    @FXML
-    private void clickCategoryPanel() {
-        Category target = panelCategories.getSelectionModel().getSelectedItem();
-        if (target == null) return;
-        taskList.clear();
-        helperList.clear();
-        chooseTaskFilterMode();
-        helperList.addAll(tableTasks.getItems().stream()
-                .filter(task -> task.getCategory() == target).toList());
-
-        tableTasks.setItems(helperList);
     }
 
     @FXML
