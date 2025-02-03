@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class ListCellCategory extends ListCell<Category> {
 
-    HomeController homeController = new HomeController();
+    private final HomeController homeController = new HomeController();
 
     @Override
     protected void updateItem(Category category, boolean empty) {

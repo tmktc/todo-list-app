@@ -5,7 +5,10 @@ import cz.tmktc.todolistapp.model.observer.Observable;
 import cz.tmktc.todolistapp.model.observer.Observer;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class TaskManager implements Observable {
     private static TaskManager taskManager = null;

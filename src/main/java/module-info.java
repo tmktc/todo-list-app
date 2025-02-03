@@ -1,7 +1,6 @@
 module cz.tmktc.todolistapp {
     requires javafx.controls;
     requires javafx.fxml;
-    requires java.desktop;
 
 
     opens cz.tmktc.todolistapp to javafx.fxml;

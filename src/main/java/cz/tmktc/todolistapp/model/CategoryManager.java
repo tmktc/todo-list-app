@@ -4,7 +4,10 @@ import cz.tmktc.todolistapp.model.observer.ChangeType;
 import cz.tmktc.todolistapp.model.observer.Observable;
 import cz.tmktc.todolistapp.model.observer.Observer;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class CategoryManager implements Observable {
     private static CategoryManager categoryManager = null;
@@ -51,5 +54,4 @@ public class CategoryManager implements Observable {
             observer.update();
         }
     }
-
 }

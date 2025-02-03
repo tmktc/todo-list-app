@@ -23,6 +23,9 @@ public class HomeController {
     private final ObservableList<Category> categoryList = FXCollections.observableArrayList();
     private final ObservableList<Task> helperList = FXCollections.observableArrayList();
     private final ObservableList<Task> taskList = FXCollections.observableArrayList();
+    private final String allMode = "Show all tasks";
+    private final String unfinishedMode = "Show unfinished tasks";
+    private final String finishedMode = "Show finished tasks";
     @FXML
     private ChoiceBox<String> boxTaskFilterMode;
     @FXML
@@ -37,11 +40,6 @@ public class HomeController {
     private TableColumn<Task, Boolean> columnStatus;
     @FXML
     private ListView<Category> panelCategories;
-
-    private final String allMode = "Show all tasks";
-    private final String unfinishedMode = "Show unfinished tasks";
-    private final String finishedMode = "Show finished tasks";
-
     private Category currentCategoryFilter;
     private String currentTaskFilter = allMode;
 
@@ -124,13 +122,18 @@ public class HomeController {
         if (currentCategoryFilter != null) {
             taskList.addAll(TaskManager.getInstance().taskList.values().stream()
                     .filter(task -> task.getCategory() == currentCategoryFilter).toList());
-        } else taskList.addAll(TaskManager.getInstance().taskList.values());
+        } else {
+            taskList.addAll(TaskManager.getInstance().taskList.values());
+        }
+
         helperList.clear();
         if (currentTaskFilter.equals(finishedMode)) {
             helperList.addAll(taskList.stream().filter(Task::isFinished).toList());
         } else if (currentTaskFilter.equals(unfinishedMode)) {
             helperList.addAll(taskList.stream().filter(task -> !task.isFinished()).toList());
-        } else helperList.addAll(taskList);
+        } else {
+            helperList.addAll(taskList);
+        }
 
         tableTasks.setItems(helperList);
     }
