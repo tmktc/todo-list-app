@@ -2,6 +2,9 @@ package cz.tmktc.todolistapp.model;
 
 import java.time.LocalDate;
 
+/**
+ * Task class.
+ */
 public class Task {
     private static int idCounter;
     private final int id;

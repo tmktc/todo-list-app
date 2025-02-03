@@ -18,6 +18,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.time.LocalDate;
 
+/**
+ * Controller for the home window.
+ */
 public class HomeController {
 
     private final ObservableList<Category> categoryList = FXCollections.observableArrayList();
@@ -43,6 +46,12 @@ public class HomeController {
     private Category currentCategoryFilter;
     private String currentTaskFilter = allMode;
 
+    /**
+     * Registers observers,
+     * sets up tasks tableView and task filter mode choiceBox,
+     * updates category and task lists
+     * and sets cell factories.
+     */
     @FXML
     private void initialize() {
         TaskManager.getInstance().register(ChangeType.TASKS_CHANGE, this::updateTasks);
@@ -64,6 +73,9 @@ public class HomeController {
         columnStatus.setCellValueFactory(new PropertyValueFactory<>("finished"));
     }
 
+    /**
+     * Clears the category list, then adds all categories and sets them to the category panel.
+     */
     @FXML
     private void updateCategories() {
         categoryList.clear();
@@ -71,6 +83,9 @@ public class HomeController {
         panelCategories.setItems(categoryList);
     }
 
+    /**
+     * Sets up a context menu for each tableView row.
+     */
     @FXML
     private void setupTaskTable() {
         tableTasks.setRowFactory(
@@ -83,8 +98,8 @@ public class HomeController {
                     MenuItem edit = new MenuItem("Edit");
                     MenuItem delete = new MenuItem("Delete");
 
-                    markComplete.setOnAction(actionEvent -> completeTask(row.getItem().getId(), true));
-                    markNotComplete.setOnAction(actionEvent -> completeTask(row.getItem().getId(), false));
+                    markComplete.setOnAction(actionEvent -> finishTask(row.getItem().getId(), true));
+                    markNotComplete.setOnAction(actionEvent -> finishTask(row.getItem().getId(), false));
 
                     edit.setOnAction(actionEvent -> {
                         try {
@@ -107,6 +122,9 @@ public class HomeController {
         );
     }
 
+    /**
+     * Adds the modes to the task filter mode choiceBox.
+     */
     @FXML
     private void setupTaskFilterModeChoiceBox() {
         ObservableList<String> modes = FXCollections.observableArrayList();
@@ -115,6 +133,9 @@ public class HomeController {
         boxTaskFilterMode.getSelectionModel().select(0);
     }
 
+    /**
+     * Updates the task list based on the current filter options.
+     */
     @FXML
     private void updateTasks() {
         taskList.clear();
@@ -138,6 +159,9 @@ public class HomeController {
         tableTasks.setItems(helperList);
     }
 
+    /**
+     * Updates the current category filter.
+     */
     @FXML
     private void chooseCategoryFilter() {
         Category target = panelCategories.getSelectionModel().getSelectedItem();
@@ -148,12 +172,18 @@ public class HomeController {
         updateTasks();
     }
 
+    /**
+     * Updates the current task filter.
+     */
     @FXML
     private void chooseTaskFilter() {
         currentTaskFilter = boxTaskFilterMode.getValue();
         updateTasks();
     }
 
+    /**
+     * Launches the new category form window.
+     */
     @FXML
     private void clickNewCategoryButton() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(ToDoApp.class.getResource("newCategoryForm.fxml"));
@@ -165,6 +195,9 @@ public class HomeController {
         stage.show();
     }
 
+    /**
+     * Launches the new task form window.
+     */
     @FXML
     private void clickNewTaskButton() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(ToDoApp.class.getResource("newTaskForm.fxml"));
@@ -176,8 +209,13 @@ public class HomeController {
         stage.show();
     }
 
+    /**
+     * Launches the category edit form window.
+     *
+     * @param categoryID id of the category to be edited
+     */
     @FXML
-    public void renameCategory(int categoryID) throws IOException {
+    public void editCategory(int categoryID) throws IOException {
         UserDataContainer.getInstance().storeCategory(categoryID);
 
         FXMLLoader fxmlLoader = new FXMLLoader(ToDoApp.class.getResource("editCategoryForm.fxml"));
@@ -189,14 +227,30 @@ public class HomeController {
         stage.show();
     }
 
+    /**
+     * Deletes the given category.
+     *
+     * @param categoryID id of the category to be deleted
+     */
     public void deleteCategory(int categoryID) {
         CategoryManager.getInstance().delete(categoryID);
     }
 
-    public void completeTask(int taskID, boolean status) {
+    /**
+     * Changes the finish status of the task.
+     *
+     * @param taskID id of the task
+     * @param status status to set
+     */
+    public void finishTask(int taskID, boolean status) {
         TaskManager.getInstance().complete(taskID, status);
     }
 
+    /**
+     * Launches the task edit form window.
+     *
+     * @param taskID id of the task to be edited
+     */
     @FXML
     public void editTask(int taskID) throws IOException {
         UserDataContainer.getInstance().storeTask(taskID);
@@ -210,6 +264,11 @@ public class HomeController {
         stage.show();
     }
 
+    /**
+     * Deletes the given task.
+     *
+     * @param taskID id of the task to be deleted
+     */
     public void deleteTask(int taskID) {
         TaskManager.getInstance().delete(taskID);
     }

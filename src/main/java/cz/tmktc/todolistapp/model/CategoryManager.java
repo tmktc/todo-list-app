@@ -9,6 +9,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Manages categories - keeps a list of them, creates them, updates them and deletes them.
+ */
 public class CategoryManager implements Observable {
     private static CategoryManager categoryManager = null;
     public final Map<Integer, Category> categoryList;
@@ -40,7 +43,6 @@ public class CategoryManager implements Observable {
     public void delete(int id) {
         TaskManager.getInstance().taskList.values().removeIf(task -> task.getCategory().getId() == id);
         categoryList.remove(id);
-
         notifyObserver();
     }
 

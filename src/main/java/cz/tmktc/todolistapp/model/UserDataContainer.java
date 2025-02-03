@@ -1,5 +1,8 @@
 package cz.tmktc.todolistapp.model;
 
+/**
+ * Stores an IDs of categories and tasks to use across different controllers.
+ */
 public class UserDataContainer {
     private static UserDataContainer userDataContainer = null;
     private Category category;

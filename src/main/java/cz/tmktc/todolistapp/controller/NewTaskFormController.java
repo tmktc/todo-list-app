@@ -9,6 +9,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+/**
+ * Controller for the new task form window.
+ */
 public class NewTaskFormController {
 
     private final ObservableList<Category> categories = FXCollections.observableArrayList();
@@ -23,12 +26,20 @@ public class NewTaskFormController {
     @FXML
     private Button buttonCreate;
 
+    /**
+     * Sets the current list of categories into the choiceBox.
+     */
     @FXML
     private void initialize() {
         categories.addAll(CategoryManager.getInstance().categoryList.values());
         boxCategory.setItems(categories);
     }
 
+    /**
+     * Takes the input from the fields and creates the task.
+     * <p>
+     * If the fields are empty, it shows a warning that all the fields have to be filled.
+     */
     @FXML
     private void clickCreateButton() {
 

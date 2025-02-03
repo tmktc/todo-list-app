@@ -1,5 +1,8 @@
 package cz.tmktc.todolistapp.model;
 
+/**
+ * Category class.
+ */
 public class Category {
     private static int idCounter;
     private final int id;

@@ -8,6 +8,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+/**
+ * Controller for the category edit form window.
+ */
 public class EditCategoryFormController {
 
     @FXML
@@ -19,11 +22,19 @@ public class EditCategoryFormController {
     @FXML
     private TextField fieldName;
 
+    /**
+     * Sets the current category name into the name textField.
+     */
     @FXML
     private void initialize() {
         fieldName.setText(UserDataContainer.getInstance().getCategory().getName());
     }
 
+    /**
+     * Takes the input from the name textField and updates the category.
+     * <p>
+     * If the textField is empty, it shows a warning that the category name can not be empty.
+     */
     @FXML
     private void clickEditButton() {
         if (fieldName.getText().isEmpty()) {

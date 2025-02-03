@@ -10,6 +10,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Manages tasks - keeps a list of them, creates them, updates them and deletes them.
+ */
 public class TaskManager implements Observable {
     private static TaskManager taskManager = null;
     public final Map<Integer, Task> taskList;

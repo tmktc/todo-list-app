@@ -9,6 +9,9 @@ import javafx.scene.text.Font;
 
 import java.io.IOException;
 
+/**
+ * Sets up cells in category listView - sets contents, defines contextMenu and sets font size.
+ */
 public class ListCellCategory extends ListCell<Category> {
 
     private final HomeController homeController = new HomeController();
@@ -20,19 +23,19 @@ public class ListCellCategory extends ListCell<Category> {
         else {
             setText(category.getName());
 
-            MenuItem rename = new MenuItem("Rename");
+            MenuItem edit = new MenuItem("Edit");
             MenuItem delete = new MenuItem("Delete");
 
-            rename.setOnAction(event -> {
+            edit.setOnAction(event -> {
                 try {
-                    homeController.renameCategory(category.getId());
+                    homeController.editCategory(category.getId());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
             });
             delete.setOnAction(event -> homeController.deleteCategory(category.getId()));
 
-            setContextMenu(new ContextMenu(rename, delete));
+            setContextMenu(new ContextMenu(edit, delete));
             setFont(Font.font(15));
         }
     }
