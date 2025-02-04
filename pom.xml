@@ -6,7 +6,7 @@
 
     <groupId>cz.tmktc</groupId>
     <artifactId>todo-list-app</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>todo-list-app</name>
 
     <properties>
