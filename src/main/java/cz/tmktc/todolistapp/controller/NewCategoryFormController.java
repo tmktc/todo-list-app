@@ -7,6 +7,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+/**
+ * Controller for the new category form window.
+ */
 public class NewCategoryFormController {
 
     @FXML
@@ -18,6 +21,11 @@ public class NewCategoryFormController {
     @FXML
     private TextField fieldName;
 
+    /**
+     * Takes the input from the name textField and creates the category.
+     * <p>
+     * If the textField is empty, it shows a warning that the category name can not be empty.
+     */
     @FXML
     private void clickCreateButton() {
 

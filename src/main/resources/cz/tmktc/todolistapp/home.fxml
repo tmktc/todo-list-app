@@ -18,7 +18,8 @@
             <Font name="Source Code Pro" size="18.0"/>
         </font>
     </Button>
-    <ChoiceBox fx:id="boxMode" onAction="#chooseTaskFilterMode" GridPane.halignment="RIGHT" GridPane.rowIndex="1"/>
+    <ChoiceBox fx:id="boxTaskFilterMode" onAction="#chooseTaskFilter" GridPane.halignment="RIGHT"
+               GridPane.rowIndex="1"/>
     <SplitPane dividerPositions="0.25" prefHeight="200.0" prefWidth="200.0">
         <VBox>
             <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#clickNewCategoryButton"
@@ -27,7 +28,7 @@
                     <Font name="Source Code Pro" size="18.0"/>
                 </font>
             </Button>
-            <ListView fx:id="panelCategories" onMouseClicked="#clickCategoryPanel" VBox.vgrow="ALWAYS"/>
+            <ListView fx:id="panelCategories" onMouseClicked="#chooseCategoryFilter" VBox.vgrow="ALWAYS"/>
         </VBox>
         <VBox>
             <TableView fx:id="tableTasks" VBox.vgrow="ALWAYS">
@@ -35,7 +36,7 @@
                     <TableColumn fx:id="columnCategory" minWidth="-1.0" prefWidth="100.0" text="Category"/>
                     <TableColumn fx:id="columnTask" minWidth="-1.0" prefWidth="300.0" text="Task"/>
                     <TableColumn fx:id="columnDueDate" minWidth="-1.0" prefWidth="100.0" text="Due Date"/>
-                    <TableColumn fx:id="columnStatus" minWidth="-1.0" prefWidth="90.0" text="Completed"/>
+                    <TableColumn fx:id="columnStatus" minWidth="-1.0" prefWidth="90.0" text="Finished"/>
                 </columns>
             </TableView>
         </VBox>

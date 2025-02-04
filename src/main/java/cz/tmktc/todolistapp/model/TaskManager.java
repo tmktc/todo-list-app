@@ -5,15 +5,21 @@ import cz.tmktc.todolistapp.model.observer.Observable;
 import cz.tmktc.todolistapp.model.observer.Observer;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
+/**
+ * Manages tasks - keeps a list of them, creates them, updates them and deletes them.
+ */
 public class TaskManager implements Observable {
     private static TaskManager taskManager = null;
-    public final List<Task> taskList;
+    public final Map<Integer, Task> taskList;
     private final Map<ChangeType, Set<Observer>> listOfObservers = new HashMap<>();
 
     private TaskManager() {
-        taskList = new ArrayList<>();
+        taskList = new HashMap<>();
         for (ChangeType changeType : ChangeType.values()) {
             listOfObservers.put(changeType, new HashSet<>());
         }
@@ -25,30 +31,25 @@ public class TaskManager implements Observable {
     }
 
     public void create(String name, Category category, LocalDate dueDate) {
-        taskList.add(new Task(name, category, dueDate));
+        Task task = new Task(name, category, dueDate);
+        taskList.put(task.getId(), task);
         notifyObserver();
     }
 
     public void update(int id, String name, Category category, LocalDate dueDate) {
-        for (Task task : taskList) {
-            if (task.getId() == id) {
-                task.setName(name);
-                task.setCategory(category);
-                task.setDueDate(dueDate);
-            }
-        }
+        taskList.get(id).setName(name);
+        taskList.get(id).setCategory(category);
+        taskList.get(id).setDueDate(dueDate);
         notifyObserver();
     }
 
     public void delete(int id) {
-        taskList.removeIf(task -> task.getId() == id);
+        taskList.remove(id);
         notifyObserver();
     }
 
-    public void complete(int id, boolean complete) {
-        for (Task task : taskList) {
-            if (task.getId() == id) task.setFinished(complete);
-        }
+    public void complete(int id, boolean finished) {
+        taskList.get(id).setFinished(finished);
         notifyObserver();
     }
 

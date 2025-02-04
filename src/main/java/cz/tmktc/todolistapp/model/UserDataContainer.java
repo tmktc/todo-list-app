@@ -1,5 +1,8 @@
 package cz.tmktc.todolistapp.model;
 
+/**
+ * Stores an IDs of categories and tasks to use across different controllers.
+ */
 public class UserDataContainer {
     private static UserDataContainer userDataContainer = null;
     private Category category;
@@ -16,15 +19,11 @@ public class UserDataContainer {
     }
 
     public void storeCategory(int id) {
-        for (Category c : CategoryManager.getInstance().categoryList) {
-            if (c.getId() == id) this.category = c;
-        }
+        this.category = CategoryManager.getInstance().categoryList.get(id);
     }
 
     public void storeTask(int id) {
-        for (Task t : TaskManager.getInstance().taskList) {
-            if (t.getId() == id) this.task = t;
-        }
+        this.task = TaskManager.getInstance().taskList.get(id);
     }
 
     public Category getCategory() {

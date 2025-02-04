@@ -4,15 +4,21 @@ import cz.tmktc.todolistapp.model.observer.ChangeType;
 import cz.tmktc.todolistapp.model.observer.Observable;
 import cz.tmktc.todolistapp.model.observer.Observer;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
+/**
+ * Manages categories - keeps a list of them, creates them, updates them and deletes them.
+ */
 public class CategoryManager implements Observable {
     private static CategoryManager categoryManager = null;
-    public final List<Category> categoryList;
+    public final Map<Integer, Category> categoryList;
     private final Map<ChangeType, Set<Observer>> listOfObservers = new HashMap<>();
 
     private CategoryManager() {
-        categoryList = new ArrayList<>();
+        categoryList = new HashMap<>();
         for (ChangeType changeType : ChangeType.values()) {
             listOfObservers.put(changeType, new HashSet<>());
         }
@@ -24,23 +30,19 @@ public class CategoryManager implements Observable {
     }
 
     public void create(String name) {
-        categoryList.add(new Category(name));
+        Category category = new Category(name);
+        categoryList.put(category.getId(), category);
         notifyObserver();
     }
 
     public void update(int id, String name) {
-        for (Category category : categoryList) {
-            if (category.getId() == id) {
-                category.setName(name);
-            }
-        }
+        categoryList.get(id).setName(name);
         notifyObserver();
     }
 
     public void delete(int id) {
-        TaskManager.getInstance().taskList.removeIf(task -> task.getCategory().getId() == id);
-        categoryList.removeIf(category -> category.getId() == id);
-
+        TaskManager.getInstance().taskList.values().removeIf(task -> task.getCategory().getId() == id);
+        categoryList.remove(id);
         notifyObserver();
     }
 
@@ -54,5 +56,4 @@ public class CategoryManager implements Observable {
             observer.update();
         }
     }
-
 }
