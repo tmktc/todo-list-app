@@ -28,8 +28,6 @@
                GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
     <DatePicker fx:id="datePickerDueDate" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
                 GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
-    <ChoiceBox fx:id="boxCategory" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER"
-               GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
     <Button fx:id="buttonCreate" mnemonicParsing="false" onMouseClicked="#clickCreateButton" text="Create"
             GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="4"
             GridPane.valignment="CENTER" GridPane.vgrow="NEVER"/>
@@ -38,4 +36,5 @@
             <Font name="Source Code Pro" size="14.0"/>
         </font>
     </Label>
+    <TextField fx:id="fieldCategory" layoutX="148.0" layoutY="19.0" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 </GridPane>
