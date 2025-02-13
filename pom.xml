@@ -43,6 +43,11 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.18.2</version>
         </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>2.18.2</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -65,7 +70,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>cz.tmktc.todolistapp/cz.tmktc.todolistapp.ToDoApp</mainClass>
+                            <mainClass>cz.tmktc.todolistapp/cz.tmktc.todolistapp.ToDoListAPP</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
