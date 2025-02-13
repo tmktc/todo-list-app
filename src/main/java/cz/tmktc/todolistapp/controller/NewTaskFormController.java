@@ -1,12 +1,12 @@
 package cz.tmktc.todolistapp.controller;
 
-import cz.tmktc.todolistapp.model.Category;
-import cz.tmktc.todolistapp.model.CategoryManager;
-import cz.tmktc.todolistapp.model.TaskManager;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import cz.tmktc.todolistapp.api.Task;
+import cz.tmktc.todolistapp.api.TaskService;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 /**
@@ -14,7 +14,8 @@ import javafx.stage.Stage;
  */
 public class NewTaskFormController {
 
-    private final ObservableList<Category> categories = FXCollections.observableArrayList();
+    @FXML
+    private TextField fieldCategory;
     @FXML
     private Label labelWarning;
     @FXML
@@ -22,18 +23,7 @@ public class NewTaskFormController {
     @FXML
     private DatePicker datePickerDueDate;
     @FXML
-    private ChoiceBox<Category> boxCategory;
-    @FXML
     private Button buttonCreate;
-
-    /**
-     * Sets the current list of categories into the choiceBox.
-     */
-    @FXML
-    private void initialize() {
-        categories.addAll(CategoryManager.getInstance().categoryList.values());
-        boxCategory.setItems(categories);
-    }
 
     /**
      * Takes the input from the fields and creates the task.
@@ -43,10 +33,12 @@ public class NewTaskFormController {
     @FXML
     private void clickCreateButton() {
 
-        if (fieldName.getText().isEmpty() || boxCategory.getValue() == null || datePickerDueDate.getValue() == null) {
+        if (fieldName.getText().isEmpty() || fieldCategory.getText() == null || datePickerDueDate.getValue() == null) {
             labelWarning.setText("All fields have to be filled");
         } else {
-            TaskManager.getInstance().create(fieldName.getText(), boxCategory.getValue(), datePickerDueDate.getValue());
+            Task task = new Task(fieldCategory.getText(), fieldName.getText(), datePickerDueDate.getValue());
+            TaskService.getInstance().createTask(task);
+
             Stage stage = (Stage) buttonCreate.getScene().getWindow();
             stage.close();
         }

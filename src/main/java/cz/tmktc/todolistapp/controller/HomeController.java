@@ -1,7 +1,9 @@
 package cz.tmktc.todolistapp.controller;
 
-import cz.tmktc.todolistapp.ToDoApp;
-import cz.tmktc.todolistapp.model.*;
+import cz.tmktc.todolistapp.ToDoListAPP;
+import cz.tmktc.todolistapp.api.Task;
+import cz.tmktc.todolistapp.api.TaskService;
+import cz.tmktc.todolistapp.model.UserDataContainer;
 import cz.tmktc.todolistapp.model.observer.ChangeType;
 import cz.tmktc.todolistapp.view.ListCellCategory;
 import javafx.beans.binding.Bindings;
@@ -17,15 +19,17 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Controller for the home window.
  */
 public class HomeController {
-
-    private final ObservableList<Category> categoryList = FXCollections.observableArrayList();
-    private final ObservableList<Task> helperList = FXCollections.observableArrayList();
+    private final ObservableList<String> categoryList = FXCollections.observableArrayList();
+    private final ObservableList<Task> currentlyDisplayedTasksList = FXCollections.observableArrayList();
     private final ObservableList<Task> taskList = FXCollections.observableArrayList();
+    private final Set<String> helperCategorySet = new HashSet<>();
     private final String allMode = "Show all tasks";
     private final String unfinishedMode = "Show unfinished tasks";
     private final String finishedMode = "Show finished tasks";
@@ -34,7 +38,7 @@ public class HomeController {
     @FXML
     private TableView<Task> tableTasks;
     @FXML
-    private TableColumn<Task, Category> columnCategory;
+    private TableColumn<Task, String> columnCategory;
     @FXML
     private TableColumn<Task, String> columnTask;
     @FXML
@@ -42,8 +46,8 @@ public class HomeController {
     @FXML
     private TableColumn<Task, Boolean> columnStatus;
     @FXML
-    private ListView<Category> panelCategories;
-    private Category currentCategoryFilter;
+    private ListView<String> panelCategories;
+    private String currentCategoryFilter;
     private String currentTaskFilter = allMode;
 
     /**
@@ -54,16 +58,11 @@ public class HomeController {
      */
     @FXML
     private void initialize() {
-        TaskManager.getInstance().register(ChangeType.TASKS_CHANGE, this::updateTasks);
-        CategoryManager.getInstance().register(ChangeType.CATEGORIES_CHANGE, () -> {
-            updateCategories();
-            updateTasks();
-        });
+        TaskService.getInstance().register(ChangeType.TASKS_CHANGE, this::updateTasks);
 
         setupTaskTable();
         setupTaskFilterModeChoiceBox();
 
-        updateCategories();
         updateTasks();
 
         panelCategories.setCellFactory(param -> new ListCellCategory());
@@ -71,16 +70,6 @@ public class HomeController {
         columnTask.setCellValueFactory(new PropertyValueFactory<>("name"));
         columnDueDate.setCellValueFactory(new PropertyValueFactory<>("dueDate"));
         columnStatus.setCellValueFactory(new PropertyValueFactory<>("finished"));
-    }
-
-    /**
-     * Clears the category list, then adds all categories and sets them to the category panel.
-     */
-    @FXML
-    private void updateCategories() {
-        categoryList.clear();
-        categoryList.addAll(CategoryManager.getInstance().categoryList.values());
-        panelCategories.setItems(categoryList);
     }
 
     /**
@@ -98,17 +87,17 @@ public class HomeController {
                     MenuItem edit = new MenuItem("Edit");
                     MenuItem delete = new MenuItem("Delete");
 
-                    markComplete.setOnAction(actionEvent -> finishTask(row.getItem().getId(), true));
-                    markNotComplete.setOnAction(actionEvent -> finishTask(row.getItem().getId(), false));
+                    markComplete.setOnAction(actionEvent -> finishTask(row.getItem().getID(), true));
+                    markNotComplete.setOnAction(actionEvent -> finishTask(row.getItem().getID(), false));
 
                     edit.setOnAction(actionEvent -> {
                         try {
-                            editTask(row.getItem().getId());
+                            editTask(row.getItem().getID());
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
                     });
-                    delete.setOnAction(actionEvent -> deleteTask(row.getItem().getId()));
+                    delete.setOnAction(actionEvent -> deleteTask(row.getItem().getID()));
 
                     rowMenu.getItems().addAll(markComplete, markNotComplete, edit, delete);
 
@@ -134,45 +123,6 @@ public class HomeController {
     }
 
     /**
-     * Updates the task list based on the current filter options.
-     */
-    @FXML
-    private void updateTasks() {
-        taskList.clear();
-
-        if (currentCategoryFilter != null) {
-            taskList.addAll(TaskManager.getInstance().taskList.values().stream()
-                    .filter(task -> task.getCategory() == currentCategoryFilter).toList());
-        } else {
-            taskList.addAll(TaskManager.getInstance().taskList.values());
-        }
-
-        helperList.clear();
-        if (currentTaskFilter.equals(finishedMode)) {
-            helperList.addAll(taskList.stream().filter(Task::isFinished).toList());
-        } else if (currentTaskFilter.equals(unfinishedMode)) {
-            helperList.addAll(taskList.stream().filter(task -> !task.isFinished()).toList());
-        } else {
-            helperList.addAll(taskList);
-        }
-
-        tableTasks.setItems(helperList);
-    }
-
-    /**
-     * Updates the current category filter.
-     */
-    @FXML
-    private void chooseCategoryFilter() {
-        Category target = panelCategories.getSelectionModel().getSelectedItem();
-        if (target == null) return;
-
-        if (target == currentCategoryFilter) currentCategoryFilter = null;
-        else currentCategoryFilter = target;
-        updateTasks();
-    }
-
-    /**
      * Updates the current task filter.
      */
     @FXML
@@ -182,17 +132,50 @@ public class HomeController {
     }
 
     /**
-     * Launches the new category form window.
+     * Updates the current category filter.
      */
     @FXML
-    private void clickNewCategoryButton() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(ToDoApp.class.getResource("newCategoryForm.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        Stage stage = new Stage();
-        stage.setTitle("New Category");
-        stage.setScene(scene);
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.show();
+    private void chooseCategoryFilter() {
+        String target = panelCategories.getSelectionModel().getSelectedItem();
+        if (target == null) return;
+
+        if (target.equals(currentCategoryFilter)) currentCategoryFilter = null;
+        else currentCategoryFilter = target;
+        updateTasks();
+    }
+
+    /**
+     * Updates the task list based on the current filter options.
+     */
+    @FXML
+    private void updateTasks() {
+        taskList.clear();
+        categoryList.clear();
+        helperCategorySet.clear();
+
+        for (Task t : TaskService.getInstance().getAllTasks()) {
+            helperCategorySet.add(t.getCategory());
+        }
+        categoryList.addAll(helperCategorySet);
+
+        if (currentCategoryFilter != null) {
+            taskList.addAll(TaskService.getInstance().getAllTasks().stream()
+                    .filter(task -> task.getCategory().equals(currentCategoryFilter)).toList());
+        } else {
+            taskList.addAll(TaskService.getInstance().getAllTasks());
+        }
+
+        currentlyDisplayedTasksList.clear();
+        if (currentTaskFilter.equals(finishedMode)) {
+            currentlyDisplayedTasksList.addAll(taskList.stream().filter(Task::isFinished).toList());
+        } else if (currentTaskFilter.equals(unfinishedMode)) {
+            currentlyDisplayedTasksList.addAll(taskList.stream().filter(task -> !task.isFinished()).toList());
+        } else {
+            currentlyDisplayedTasksList.addAll(taskList);
+        }
+
+        tableTasks.setItems(currentlyDisplayedTasksList);
+        panelCategories.setItems(categoryList);
     }
 
     /**
@@ -200,7 +183,7 @@ public class HomeController {
      */
     @FXML
     private void clickNewTaskButton() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(ToDoApp.class.getResource("newTaskForm.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(ToDoListAPP.class.getResource("newTaskForm.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = new Stage();
         stage.setTitle("New Task");
@@ -210,40 +193,19 @@ public class HomeController {
     }
 
     /**
-     * Launches the category edit form window.
-     *
-     * @param categoryID id of the category to be edited
-     */
-    @FXML
-    public void editCategory(int categoryID) throws IOException {
-        UserDataContainer.getInstance().storeCategory(categoryID);
-
-        FXMLLoader fxmlLoader = new FXMLLoader(ToDoApp.class.getResource("editCategoryForm.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        Stage stage = new Stage();
-        stage.setTitle("Edit category");
-        stage.setScene(scene);
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.show();
-    }
-
-    /**
-     * Deletes the given category.
-     *
-     * @param categoryID id of the category to be deleted
-     */
-    public void deleteCategory(int categoryID) {
-        CategoryManager.getInstance().delete(categoryID);
-    }
-
-    /**
      * Changes the finish status of the task.
      *
      * @param taskID id of the task
      * @param status status to set
      */
-    public void finishTask(int taskID, boolean status) {
-        TaskManager.getInstance().complete(taskID, status);
+    public void finishTask(String taskID, boolean status) {
+        for (Task t : currentlyDisplayedTasksList) {
+            if (t.getID().equals(taskID)) {
+                t.setFinished(status);
+                TaskService.getInstance().createTask(t);
+                break;
+            }
+        }
     }
 
     /**
@@ -252,10 +214,10 @@ public class HomeController {
      * @param taskID id of the task to be edited
      */
     @FXML
-    public void editTask(int taskID) throws IOException {
+    public void editTask(String taskID) throws IOException {
         UserDataContainer.getInstance().storeTask(taskID);
 
-        FXMLLoader fxmlLoader = new FXMLLoader(ToDoApp.class.getResource("editTaskForm.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(ToDoListAPP.class.getResource("editTaskForm.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = new Stage();
         stage.setTitle("Edit task");
@@ -269,7 +231,7 @@ public class HomeController {
      *
      * @param taskID id of the task to be deleted
      */
-    public void deleteTask(int taskID) {
-        TaskManager.getInstance().delete(taskID);
+    public void deleteTask(String taskID) {
+        TaskService.getInstance().deleteTask(taskID);
     }
 }
