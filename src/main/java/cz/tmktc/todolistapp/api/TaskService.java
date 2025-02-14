@@ -16,6 +16,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.*;
 
+/**
+ * Sends requests to the API.
+ */
 public class TaskService implements Observable {
     private static final String BASE_URL = "http://localhost:8080/tasks";
     private static TaskService taskService = null;
@@ -37,6 +40,11 @@ public class TaskService implements Observable {
         return taskService;
     }
 
+    /**
+     * Returns all tasks.
+     *
+     * @return all tasks.
+     */
     public List<Task> getAllTasks() {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BASE_URL))
@@ -61,6 +69,12 @@ public class TaskService implements Observable {
         throw new RuntimeException("Failed to fetch tasks: " + response.statusCode());
     }
 
+    /**
+     * Returns a task.
+     *
+     * @param id id of a task
+     * @return task whose id matches the parameter
+     */
     public Task getTask(String id) {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BASE_URL + "/" + id))
@@ -85,6 +99,12 @@ public class TaskService implements Observable {
         throw new RuntimeException("Task not found: " + response.statusCode());
     }
 
+    /**
+     * Creates a task.
+     * If ID is included in the request, it updates the given task instead.
+     *
+     * @param task to be created or updated
+     */
     public void saveTask(Task task) {
         String requestBody;
         try {
@@ -110,6 +130,11 @@ public class TaskService implements Observable {
         else throw new RuntimeException("Failed to create task: " + response.statusCode());
     }
 
+    /**
+     * Deletes a task.
+     *
+     * @param id id of the task that is to be deleted
+     */
     public void deleteTask(String id) {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BASE_URL + "/" + id))

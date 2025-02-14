@@ -3,7 +3,7 @@ package cz.tmktc.todolistapp.api;
 import java.time.LocalDate;
 
 /**
- * Task class.
+ * Model class for mapping.
  */
 public class Task {
     private String id;

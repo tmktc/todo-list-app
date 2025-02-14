@@ -25,9 +25,8 @@ import java.time.LocalDate;
  */
 public class HomeController {
     private final ObservableList<String> categoryList = FXCollections.observableArrayList();
-    private final ObservableList<Task> currentlyDisplayedTasksList = FXCollections.observableArrayList();
     private final ObservableList<Task> taskList = FXCollections.observableArrayList();
-    private final ObservableList<Task> helperTaskList = FXCollections.observableArrayList();
+    private final ObservableList<Task> currentlyDisplayedTasksList = FXCollections.observableArrayList();
     private final String allMode = "Show all tasks";
     private final String unfinishedMode = "Show unfinished tasks";
     private final String finishedMode = "Show finished tasks";
@@ -51,7 +50,7 @@ public class HomeController {
     /**
      * Registers observers,
      * sets up tasks tableView and task filter mode choiceBox,
-     * updates category and task lists
+     * updates and filters tasks
      * and sets cell factories.
      */
     @FXML
@@ -72,7 +71,7 @@ public class HomeController {
     }
 
     /**
-     * Sets up a context menu for each tableView row.
+     * Sets up a context menu for each task tableView row.
      */
     @FXML
     private void setupTaskTable() {
@@ -143,6 +142,10 @@ public class HomeController {
         filterTasks();
     }
 
+    /**
+     * Fetches all tasks and updates category list.
+     */
+    @FXML
     private void updateTasks() {
         taskList.setAll(TaskService.getInstance().getAllTasks());
 
@@ -156,7 +159,7 @@ public class HomeController {
     }
 
     /**
-     * Updates the task list based on the current filter options.
+     * Updates currently displayed tasks based on the current filter options.
      */
     @FXML
     private void filterTasks() {
@@ -201,7 +204,7 @@ public class HomeController {
     }
 
     /**
-     * Launches the task edit form window.
+     * Stores the task to be edited and launches the task edit form window.
      *
      * @param taskID id of the task to be edited
      */

@@ -4,7 +4,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.text.Font;
 
 /**
- * Sets up cells in category listView - sets contents, defines contextMenu and sets font size.
+ * Sets up cells in category listView - sets contents and font size.
  */
 public class ListCellCategory extends ListCell<String> {
 

@@ -4,7 +4,7 @@ import cz.tmktc.todolistapp.api.Task;
 import cz.tmktc.todolistapp.api.TaskService;
 
 /**
- * Stores an IDs of categories and tasks to use across different controllers.
+ * Stores tasks to use them across different controllers.
  */
 public class UserDataContainer {
     private static UserDataContainer userDataContainer = null;

@@ -27,7 +27,7 @@ public class EditTaskFormController {
     private Button buttonEdit;
 
     /**
-     * Sets the current name, list of categories and due date into the form fields.
+     * Sets the current name, category and due date into the form fields.
      */
     @FXML
     private void initialize() {
