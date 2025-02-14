@@ -1,36 +1,36 @@
-package cz.tmktc.todolistapp.model;
+package cz.tmktc.todolistapp.api;
 
 import java.time.LocalDate;
 
 /**
- * Task class.
+ * Model class for mapping.
  */
 public class Task {
-    private static int idCounter;
-    private final int id;
-    private Category category;
+    private String id;
+    private String category;
     private String name;
     private LocalDate dueDate;
     private boolean finished;
 
-    public Task(String name, Category category, LocalDate dueDate) {
-        this.id = (idCounter + 1);
+    public Task() {
+    }
+
+    public Task(String category, String name, LocalDate dueDate) {
         this.category = category;
         this.name = name;
         this.dueDate = dueDate;
         this.finished = false;
-        idCounter++;
     }
 
-    public int getId() {
+    public String getID() {
         return id;
     }
 
-    public Category getCategory() {
+    public String getCategory() {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(String category) {
         this.category = category;
     }
 

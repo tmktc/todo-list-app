@@ -22,12 +22,11 @@
                GridPane.rowIndex="1"/>
     <SplitPane dividerPositions="0.25" prefHeight="200.0" prefWidth="200.0">
         <VBox>
-            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#clickNewCategoryButton"
-                    text="New Category">
+            <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Categories">
                 <font>
                     <Font name="Source Code Pro" size="18.0"/>
                 </font>
-            </Button>
+            </Label>
             <ListView fx:id="panelCategories" onMouseClicked="#chooseCategoryFilter" VBox.vgrow="ALWAYS"/>
         </VBox>
         <VBox>

@@ -1,13 +1,13 @@
 package cz.tmktc.todolistapp.controller;
 
-import cz.tmktc.todolistapp.model.Category;
-import cz.tmktc.todolistapp.model.CategoryManager;
-import cz.tmktc.todolistapp.model.TaskManager;
+import cz.tmktc.todolistapp.api.Task;
+import cz.tmktc.todolistapp.api.TaskService;
 import cz.tmktc.todolistapp.model.UserDataContainer;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 /**
@@ -15,7 +15,8 @@ import javafx.stage.Stage;
  */
 public class EditTaskFormController {
 
-    private final ObservableList<Category> categories = FXCollections.observableArrayList();
+    @FXML
+    private TextField fieldCategory;
     @FXML
     private Label labelWarning;
     @FXML
@@ -23,22 +24,18 @@ public class EditTaskFormController {
     @FXML
     private DatePicker datePickerDueDate;
     @FXML
-    private ChoiceBox<Category> boxCategory;
-    @FXML
     private Button buttonEdit;
 
     /**
-     * Sets the current name, list of categories and due date into the form fields.
+     * Sets the current name, category and due date into the form fields.
      */
     @FXML
     private void initialize() {
-        fieldName.setText(UserDataContainer.getInstance().getTask().getName());
+        Task task = UserDataContainer.getInstance().getTask();
 
-        categories.addAll(CategoryManager.getInstance().categoryList.values());
-        boxCategory.setItems(categories);
-        boxCategory.getSelectionModel().select(UserDataContainer.getInstance().getTask().getCategory());
-
-        datePickerDueDate.setValue(UserDataContainer.getInstance().getTask().getDueDate());
+        fieldName.setText(task.getName());
+        fieldCategory.setText(task.getCategory());
+        datePickerDueDate.setValue(task.getDueDate());
     }
 
     /**
@@ -48,10 +45,15 @@ public class EditTaskFormController {
      */
     @FXML
     private void clickEditButton() {
-        if (fieldName.getText().isEmpty() || boxCategory.getValue() == null || datePickerDueDate.getValue() == null) {
+        if (fieldName.getText().isEmpty() || fieldCategory.getText() == null || datePickerDueDate.getValue() == null) {
             labelWarning.setText("All fields have to be filled");
         } else {
-            TaskManager.getInstance().update(UserDataContainer.getInstance().getTask().getId(), fieldName.getText(), boxCategory.getValue(), datePickerDueDate.getValue());
+            Task task = UserDataContainer.getInstance().getTask();
+            task.setName(fieldName.getText());
+            task.setCategory(fieldCategory.getText().toUpperCase());
+            task.setDueDate(datePickerDueDate.getValue());
+            TaskService.getInstance().saveTask(task);
+
             Stage stage = (Stage) buttonEdit.getScene().getWindow();
             stage.close();
         }
