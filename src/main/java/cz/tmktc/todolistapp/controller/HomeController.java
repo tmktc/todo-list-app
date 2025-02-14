@@ -19,8 +19,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Controller for the home window.
@@ -29,7 +27,7 @@ public class HomeController {
     private final ObservableList<String> categoryList = FXCollections.observableArrayList();
     private final ObservableList<Task> currentlyDisplayedTasksList = FXCollections.observableArrayList();
     private final ObservableList<Task> taskList = FXCollections.observableArrayList();
-    private final Set<String> helperCategorySet = new HashSet<>();
+    private final ObservableList<Task> helperTaskList = FXCollections.observableArrayList();
     private final String allMode = "Show all tasks";
     private final String unfinishedMode = "Show unfinished tasks";
     private final String finishedMode = "Show finished tasks";
@@ -64,6 +62,7 @@ public class HomeController {
         setupTaskFilterModeChoiceBox();
 
         updateTasks();
+        filterTasks();
 
         panelCategories.setCellFactory(param -> new ListCellCategory());
         columnCategory.setCellValueFactory(new PropertyValueFactory<>("category"));
@@ -128,7 +127,7 @@ public class HomeController {
     @FXML
     private void chooseTaskFilter() {
         currentTaskFilter = boxTaskFilterMode.getValue();
-        updateTasks();
+        filterTasks();
     }
 
     /**
@@ -141,41 +140,48 @@ public class HomeController {
 
         if (target.equals(currentCategoryFilter)) currentCategoryFilter = null;
         else currentCategoryFilter = target;
-        updateTasks();
+        filterTasks();
+    }
+
+    private void updateTasks() {
+        taskList.clear();
+        categoryList.clear();
+
+        taskList.addAll(TaskService.getInstance().getAllTasks());
+
+        for (Task t : taskList) {
+            if (!categoryList.contains(t.getCategory())) categoryList.add(t.getCategory());
+        }
+        panelCategories.setItems(categoryList);
+
+        filterTasks();
     }
 
     /**
      * Updates the task list based on the current filter options.
      */
     @FXML
-    private void updateTasks() {
-        taskList.clear();
-        categoryList.clear();
-        helperCategorySet.clear();
-
-        for (Task t : TaskService.getInstance().getAllTasks()) {
-            helperCategorySet.add(t.getCategory());
-        }
-        categoryList.addAll(helperCategorySet);
+    private void filterTasks() {
+        helperTaskList.clear();
 
         if (currentCategoryFilter != null) {
-            taskList.addAll(TaskService.getInstance().getAllTasks().stream()
+            helperTaskList.addAll(taskList.stream()
                     .filter(task -> task.getCategory().equals(currentCategoryFilter)).toList());
         } else {
-            taskList.addAll(TaskService.getInstance().getAllTasks());
+            helperTaskList.addAll(taskList);
         }
 
         currentlyDisplayedTasksList.clear();
+
         if (currentTaskFilter.equals(finishedMode)) {
-            currentlyDisplayedTasksList.addAll(taskList.stream().filter(Task::isFinished).toList());
+            currentlyDisplayedTasksList.addAll(helperTaskList.stream().filter(Task::isFinished).toList());
         } else if (currentTaskFilter.equals(unfinishedMode)) {
-            currentlyDisplayedTasksList.addAll(taskList.stream().filter(task -> !task.isFinished()).toList());
+            currentlyDisplayedTasksList.addAll(helperTaskList.stream().filter(task -> !task.isFinished()).toList());
         } else {
-            currentlyDisplayedTasksList.addAll(taskList);
+            currentlyDisplayedTasksList.addAll(helperTaskList);
         }
 
         tableTasks.setItems(currentlyDisplayedTasksList);
-        panelCategories.setItems(categoryList);
     }
 
     /**
@@ -202,7 +208,7 @@ public class HomeController {
         for (Task t : currentlyDisplayedTasksList) {
             if (t.getID().equals(taskID)) {
                 t.setFinished(status);
-                TaskService.getInstance().createTask(t);
+                TaskService.getInstance().saveTask(t);
                 break;
             }
         }

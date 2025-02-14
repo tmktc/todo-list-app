@@ -31,7 +31,7 @@ public class EditTaskFormController {
      */
     @FXML
     private void initialize() {
-        Task task = TaskService.getInstance().getTask(UserDataContainer.getInstance().getTask().getID());
+        Task task = UserDataContainer.getInstance().getTask();
 
         fieldName.setText(task.getName());
         fieldCategory.setText(task.getCategory());
@@ -48,11 +48,11 @@ public class EditTaskFormController {
         if (fieldName.getText().isEmpty() || fieldCategory.getText() == null || datePickerDueDate.getValue() == null) {
             labelWarning.setText("All fields have to be filled");
         } else {
-            Task task = TaskService.getInstance().getTask(UserDataContainer.getInstance().getTask().getID());
+            Task task = UserDataContainer.getInstance().getTask();
             task.setName(fieldName.getText());
-            task.setCategory(fieldCategory.getText());
+            task.setCategory(fieldCategory.getText().toUpperCase());
             task.setDueDate(datePickerDueDate.getValue());
-            TaskService.getInstance().createTask(task);
+            TaskService.getInstance().saveTask(task);
 
             Stage stage = (Stage) buttonEdit.getScene().getWindow();
             stage.close();

@@ -36,8 +36,8 @@ public class NewTaskFormController {
         if (fieldName.getText().isEmpty() || fieldCategory.getText() == null || datePickerDueDate.getValue() == null) {
             labelWarning.setText("All fields have to be filled");
         } else {
-            Task task = new Task(fieldCategory.getText(), fieldName.getText(), datePickerDueDate.getValue());
-            TaskService.getInstance().createTask(task);
+            Task task = new Task(fieldCategory.getText().toUpperCase(), fieldName.getText(), datePickerDueDate.getValue());
+            TaskService.getInstance().saveTask(task);
 
             Stage stage = (Stage) buttonCreate.getScene().getWindow();
             stage.close();

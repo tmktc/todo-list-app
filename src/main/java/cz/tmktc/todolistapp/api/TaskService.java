@@ -85,7 +85,7 @@ public class TaskService implements Observable {
         throw new RuntimeException("Task not found: " + response.statusCode());
     }
 
-    public void createTask(Task task) {
+    public void saveTask(Task task) {
         String requestBody;
         try {
             requestBody = objectMapper.writeValueAsString(task);
