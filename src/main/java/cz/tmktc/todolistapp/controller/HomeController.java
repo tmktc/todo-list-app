@@ -144,16 +144,14 @@ public class HomeController {
     }
 
     private void updateTasks() {
-        taskList.clear();
+        taskList.setAll(TaskService.getInstance().getAllTasks());
+
         categoryList.clear();
-
-        taskList.addAll(TaskService.getInstance().getAllTasks());
-
-        for (Task t : taskList) {
-            if (!categoryList.contains(t.getCategory())) categoryList.add(t.getCategory());
+        for (Task task : taskList) {
+            if (!categoryList.contains(task.getCategory())) categoryList.add(task.getCategory());
         }
-        panelCategories.setItems(categoryList);
 
+        panelCategories.setItems(categoryList);
         filterTasks();
     }
 
@@ -162,24 +160,12 @@ public class HomeController {
      */
     @FXML
     private void filterTasks() {
-        helperTaskList.clear();
-
-        if (currentCategoryFilter != null) {
-            helperTaskList.addAll(taskList.stream()
-                    .filter(task -> task.getCategory().equals(currentCategoryFilter)).toList());
-        } else {
-            helperTaskList.addAll(taskList);
-        }
-
-        currentlyDisplayedTasksList.clear();
-
-        if (currentTaskFilter.equals(finishedMode)) {
-            currentlyDisplayedTasksList.addAll(helperTaskList.stream().filter(Task::isFinished).toList());
-        } else if (currentTaskFilter.equals(unfinishedMode)) {
-            currentlyDisplayedTasksList.addAll(helperTaskList.stream().filter(task -> !task.isFinished()).toList());
-        } else {
-            currentlyDisplayedTasksList.addAll(helperTaskList);
-        }
+        currentlyDisplayedTasksList.setAll(taskList.stream()
+                .filter(task -> currentCategoryFilter == null || task.getCategory().equals(currentCategoryFilter))
+                .filter(task -> currentTaskFilter.equals(allMode) ||
+                        (currentTaskFilter.equals(finishedMode) && task.isFinished()) ||
+                        (currentTaskFilter.equals(unfinishedMode) && !task.isFinished()))
+                .toList());
 
         tableTasks.setItems(currentlyDisplayedTasksList);
     }
